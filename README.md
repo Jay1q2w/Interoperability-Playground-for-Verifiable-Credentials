@@ -25,32 +25,94 @@ $$\text{Issuer (Inji Certify / External)} \xrightarrow{\text{OpenID4VCI}} \text{
 
 ---
 
-## 2. Architecture & Module Matrix
+## 2. System Architecture & Component Topology
 
-```
-                     +---------------------------------------+
-                     |    Inji Interoperability Playground   |
-                     |       (React + Vite + Tailwind)       |
-                     +-------------------+-------------------+
-                                         |
-                                         | REST & WebSocket (/ws)
-                                         v
-                     +---------------------------------------+
-                     |    Playground BFF & Protocol Engine   |
-                     |        (Node.js + Express + TS)       |
-                     +-------------------+-------------------+
-                                         |
-         +-------------------------------+-------------------------------+
-         |                               |                               |
-         v                               v                               v
-+------------------+           +------------------+           +------------------+
-|      ISSUER      |           |      WALLET      |           |     VERIFIER     |
-| [OpenID4VCI d13] |           |   [Holder / VP]  |           | [OpenID4VP d21]  |
-+------------------+           +------------------+           +------------------+
-| • Inji Certify   |           | • Inji Web       |           | • Inji Verify    |
-| • Walt.id Issuer |           | • Inji Mobile    |           | • Sphereon RP    |
-| • Generic VCI    |           | • Generic Wallet |           | • Generic VP     |
-+------------------+           +------------------+           +------------------+
+```mermaid
+graph TD
+    classDef client fill:#18181b,stroke:#3f3f46,stroke-width:1px,color:#f4f4f5;
+    classDef bff fill:#09090b,stroke:#52525b,stroke-width:1px,color:#f4f4f5;
+    classDef module fill:#18181b,stroke:#71717a,stroke-width:1px,color:#f4f4f5;
+    classDef protocol fill:#27272a,stroke:#3f3f46,stroke-width:1px,color:#e4e4e7;
+
+    subgraph ClientWorkspace ["1. Client Workspace & UI (React 18 + Vite + Tailwind CSS)"]
+        UI["Playground Workspace View"]:::client
+        ThreeCol["3-Column Selector<br/>(Issuer ➔ Wallet ➔ Verifier)"]:::client
+        FormatPicker["Format & Schema Picker<br/>(W3C VC / SD-JWT / mdoc)"]:::client
+        WalletView["Inji Wallet Keystore Card<br/>(Selective Disclosure Controls)"]:::client
+        Inspector["Protocol Inspector Panel<br/>(Raw HTTP, Payloads & Decoders)"]:::client
+        SequenceDiag["Sequence Timeline<br/>(Live Exchange Visualizer)"]:::client
+        TamperControl["Replay & Tamper Injector<br/>(Negative-Path Testing)"]:::client
+        MatrixUI["Matrix Dashboard<br/>(Telemetry & Audit Grid)"]:::client
+    end
+
+    subgraph Orchestrator ["2. Playground BFF & Protocol Orchestration Engine (Node.js + Express)"]
+        API["REST & WebSocket API Gateway (/api, /ws)"]:::bff
+
+        subgraph CoreProtocols ["Standardized Protocol Implementations"]
+            VCI_Engine["OpenID4VCI (draft 13)<br/>• /.well-known/openid-credential-issuer<br/>• Credential Offer Handler<br/>• Token Endpoint (Pre-Auth Code)<br/>• Proof of Possession (c_nonce)"]:::protocol
+            VP_Engine["OpenID4VP (draft 21–23)<br/>• Presentation Definition (DIF PEX 2.0)<br/>• Cross-Device QR & Deep Link<br/>• Direct_Post Submission Handler<br/>• Verification & Revocation Pipeline"]:::protocol
+        end
+
+        subgraph Cryptography ["Cryptographic Verification Subsystems"]
+            KeyStore["Key Infrastructure<br/>(Ed25519 did:key, RSA did:jwk, ES256)"]:::bff
+            W3C_Engine["W3C VC 1.1/2.0 Engine<br/>(JCS RFC 8785, Ed25519Signature2020)"]:::bff
+            SDJWT_Engine["IETF SD-JWT VC Engine<br/>(Salted Disclosures, SHA-256, KB-JWT)"]:::bff
+            MDoc_Engine["ISO/IEC 18013-5 mdoc Engine<br/>(CBOR Namespaces, MSO Digests)"]:::bff
+        end
+
+        subgraph TestingEngine ["Diagnostics, Matrix & Telemetry"]
+            TamperEngine["Mutation Engine<br/>(Signature, Claim, Nonce, Aud, Expiry)"]:::bff
+            MatrixStore["Matrix Store & Telemetry<br/>(Run History, Stats, Markdown Export)"]:::bff
+            SuiteRunner["Automated CI Suite Runner<br/>(12-Permutation Test Matrix)"]:::bff
+        end
+    end
+
+    subgraph EcosystemMatrix ["3. Tested Ecosystem Modules"]
+        subgraph Issuers ["Credential Issuers (OpenID4VCI)"]
+            I_Inji["Inji Certify (MOSIP Core)"]:::module
+            I_Walt["Walt.id Reference Issuer"]:::module
+            I_Gen["Generic OID4VCI Mock"]:::module
+        end
+
+        subgraph Wallets ["Holder Wallets (Storage & VP)"]
+            W_Web["Inji Web (Browser Wallet)"]:::module
+            W_Mob["Inji Mobile (Mimoto / QR Bridge)"]:::module
+            W_Gen["Generic Standards Wallet"]:::module
+        end
+
+        subgraph Verifiers ["Verifier Relying Parties (OpenID4VP)"]
+            V_Inji["Inji Verify (MOSIP Core / SDK)"]:::module
+            V_Sph["Sphereon / DIF Verifier"]:::module
+            V_Gen["Generic OpenID4VP RP"]:::module
+        end
+    end
+
+    UI --> API
+    ThreeCol --> API
+    FormatPicker --> API
+    WalletView --> API
+    TamperControl --> TamperEngine
+
+    API --> VCI_Engine
+    API --> VP_Engine
+    API --> SuiteRunner
+
+    VCI_Engine --> Cryptography
+    VP_Engine --> Cryptography
+    VCI_Engine --> TamperEngine
+    VP_Engine --> TamperEngine
+
+    VCI_Engine <--> Issuers
+    VCI_Engine <--> Wallets
+    VP_Engine <--> Wallets
+    VP_Engine <--> Verifiers
+
+    SuiteRunner --> MatrixStore
+    MatrixStore --> MatrixUI
+    VCI_Engine -.-> Inspector
+    VP_Engine -.-> Inspector
+    VCI_Engine -.-> SequenceDiag
+    VP_Engine -.-> SequenceDiag
 ```
 
 ### Module Implementations:
@@ -70,6 +132,28 @@ $$\text{Issuer (Inji Certify / External)} \xrightarrow{\text{OpenID4VCI}} \text{
 ---
 
 ## 3. Protocol Exchange Breakdown
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Issuer as Credential Issuer (Inji Certify / External)
+    actor Wallet as Holder Wallet (Inji Web / Mobile)
+    actor Verifier as Verifier Relying Party (Inji Verify / External)
+
+    Note over Issuer,Wallet: Phase 1: OpenID4VCI Credential Issuance (draft 13)
+    Issuer->>Wallet: 1. Credential Offer (openid-credential-offer:// with pre-authorized_code)
+    Wallet->>Issuer: 2. POST /api/issuer/token (grant_type=pre-authorized_code)
+    Issuer-->>Wallet: 3. Token Response (access_token, c_nonce)
+    Wallet->>Issuer: 4. POST /api/issuer/credential (Holder Proof JWT signed with c_nonce)
+    Issuer-->>Wallet: 5. Credential Response (signed W3C VC, SD-JWT VC, or mdoc)
+
+    Note over Wallet,Verifier: Phase 2: OpenID4VP Presentation & Verification (draft 21–23)
+    Verifier->>Wallet: 6. Authorization Request (openid4vp:// with DIF Presentation Definition & nonce)
+    Note over Wallet: Wallet evaluates requested claims (Selective Disclosure for SD-JWT / mdoc)
+    Wallet->>Verifier: 7. POST /api/verifier/response (direct_post with vp_token & presentation_submission)
+    Note over Verifier: Cryptographic validation of Issuer Signature, Holder Binding, Nonce & Expiration
+    Verifier-->>Wallet: 8. Verification Audit Result (VALID / TAMPERED / EXPIRED / REVOKED)
+```
 
 ### A. OpenID4VCI (draft 13) Issuance Flow
 1. **Issuer Metadata Discovery:** `GET /.well-known/openid-credential-issuer` returns endpoints and `credentials_supported` array.

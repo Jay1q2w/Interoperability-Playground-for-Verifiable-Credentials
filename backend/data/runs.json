@@ -1,5 +1,929 @@
 [
   {
+    "id": "run_71b81336-5cb0-438a-bba0-8f16c27935aa",
+    "timestamp": "2026-10-24T15:08:27.175Z",
+    "issuer": {
+      "id": "inji-certify",
+      "name": "Inji Certify (MOSIP Core)",
+      "version": "v0.12.0"
+    },
+    "wallet": {
+      "id": "inji-web",
+      "name": "Inji Web (Browser Wallet)",
+      "version": "v0.9.1"
+    },
+    "verifier": {
+      "id": "inji-verify",
+      "name": "Inji Verify (MOSIP Core)",
+      "version": "v0.10.4"
+    },
+    "format": "ldp_vc",
+    "profile": "MOSIP_NATIONAL_ID",
+    "tamperScenario": "NONE",
+    "outcome": "VALID",
+    "passed": true,
+    "durationMs": 14,
+    "steps": [
+      {
+        "stepIndex": 1,
+        "id": "step_1",
+        "title": "Issue Credential Offer (OpenID4VCI)",
+        "source": "Issuer",
+        "target": "Wallet",
+        "protocol": "OpenID4VCI",
+        "endpoint": "/api/issuer/offer",
+        "method": "POST",
+        "requestPayload": {
+          "issuerId": "inji-certify",
+          "format": "ldp_vc",
+          "profileId": "MOSIP_NATIONAL_ID"
+        },
+        "responsePayload": {
+          "credential_offer": {
+            "credential_issuer": "http://localhost:4000",
+            "credentials": [
+              "MosipNationalId_ldp_vc"
+            ],
+            "grants": {
+              "urn:ietf:params:oauth:grant-type:pre-authorized_code": {
+                "pre-authorized_code": "pac_67b2b1fd8d10f3fd587167d596dc6e2f",
+                "user_pin_required": false
+              }
+            }
+          },
+          "offer_uri": "openid-credential-offer://?credential_offer=%7B%22credential_issuer%22%3A%22http%3A%2F%2Flocalhost%3A4000%22%2C%22credentials%22%3A%5B%22MosipNationalId_ldp_vc%22%5D%2C%22grants%22%3A%7B%22urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code%22%3A%7B%22pre-authorized_code%22%3A%22pac_67b2b1fd8d10f3fd587167d596dc6e2f%22%2C%22user_pin_required%22%3Afalse%7D%7D%7D"
+        },
+        "status": "SUCCESS",
+        "durationMs": 0,
+        "timestamp": "2026-10-24T15:08:27.161Z",
+        "notes": "Initiated OpenID4VCI draft 13 pre-authorized code flow"
+      },
+      {
+        "stepIndex": 2,
+        "id": "step_2",
+        "title": "OAuth 2.0 Token Exchange",
+        "source": "Wallet",
+        "target": "Issuer",
+        "protocol": "OpenID4VCI",
+        "endpoint": "/api/issuer/token",
+        "method": "POST",
+        "requestPayload": {
+          "grant_type": "urn:ietf:params:oauth:grant-type:pre-authorized_code",
+          "pre-authorized_code": "pac_67b2b1fd8d10f3fd587167d596dc6e2f"
+        },
+        "responsePayload": {
+          "access_token": "at_5d77fb32ab7648645ed1de717a2976ee344345d1596165c7",
+          "token_type": "Bearer",
+          "expires_in": 3600,
+          "c_nonce": "cnonce_0b3d5ea4808ea666becdb54cfbdc0e84",
+          "c_nonce_expires_in": 86400
+        },
+        "status": "SUCCESS",
+        "durationMs": 0,
+        "timestamp": "2026-10-24T15:08:27.162Z",
+        "notes": "Issued bearer access token and c_nonce: cnonce_0b3d5ea4808ea666becdb54cfbdc0e84"
+      },
+      {
+        "stepIndex": 3,
+        "id": "step_3",
+        "title": "Credential Issuance Request & Cryptographic Signing",
+        "source": "Wallet",
+        "target": "Issuer",
+        "protocol": "OpenID4VCI",
+        "endpoint": "/api/issuer/credential",
+        "method": "POST",
+        "requestPayload": {
+          "format": "ldp_vc",
+          "proof": {
+            "proof_type": "jwt",
+            "jwt": "eyJhbGciOiJFZERTQSIsInR5cCI6Im9wZW5pZDR2Y2ktcHJvb2Yrand0IiwiandrIjp7ImNydiI6IkVkMjU1MTkiLCJ4IjoiRDlzWlRSUTEyTTRROUljdWhWR3pHUk1FQURKSlJRTVNaZmx2WTVVS3NidyIsImt0eSI6Ik9LUCIsImtpZCI6ImluamktaG9sZGVyLWRldmljZS1rZXktMDEifX0.eyJpc3MiOiJkaWQ6a2V5Ono2TWtmWDl3NTVkWmpHNVlDTkdoTXpxa1B3Y1d3UVdnVTZwUVJLWlRKMTVIYWdUdSIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NDAwMCIsImlhdCI6MTc5Mjg1NDUwNywibm9uY2UiOiJjbm9uY2VfMGIzZDVlYTQ4MDhlYTY2NmJlY2RiNTRjZmJkYzBlODQifQ.h-yIDkflo_mASoIbUYJrjN9RDn-SeZXV13KiDpkjNMTvKoEOdC9SRLrHRbudnysbQSvWLwNqfvDf9O7LYiKBDA"
+          }
+        },
+        "responsePayload": {
+          "credential": {
+            "@context": [
+              "https://www.w3.org/2018/credentials/v1",
+              "https://schema.mosip.io/credentials/v1"
+            ],
+            "id": "urn:uuid:d00b9cc7-d27c-41cc-a85d-4f31bf5c48cd",
+            "type": [
+              "VerifiableCredential",
+              "MosipNationalIdCredential"
+            ],
+            "issuer": "did:key:z6MknSLvTRWVcWNNqdSJtdj6ELPSejwLQbdzSnYsuvicwbKi",
+            "issuanceDate": "2026-10-24T15:08:27.164Z",
+            "validUntil": "2027-10-24T15:08:27.164Z",
+            "credentialSubject": {
+              "id": "did:jwk:eyJjcnYiOiJFZDI1NTE5IiwieCI6IkQ5c1pUUlExMk00UTlJY3VoVkd6R1JNRUFESkpSUU1TWmZsdlk1VUtzYnciLCJrdHkiOiJPS1AiLCJraWQiOiJpbmppLWhvbGRlci1kZXZpY2Uta2V5LTAxIn0",
+              "uin": "9876-5432-1098",
+              "fullName": "Amina Al-Mansoor",
+              "birthDate": "1994-08-15",
+              "gender": "Female",
+              "nationality": "Morocco",
+              "address": "12 Boulevard Mohammed V, Rabat"
+            },
+            "proof": {
+              "type": "Ed25519Signature2020",
+              "created": "2026-10-24T15:08:27.164Z",
+              "verificationMethod": "did:key:z6MknSLvTRWVcWNNqdSJtdj6ELPSejwLQbdzSnYsuvicwbKi#inji-certify-ed25519-key-01",
+              "proofPurpose": "assertionMethod",
+              "jws": "eyJhbGciOiJFZERTQSIsImtpZCI6ImluamktY2VydGlmeS1lZDI1NTE5LWtleS0wMSJ9.sQnqFGuqW4qvBWD9gVAy3dx8_G1d2b1k9pBOUKB789s.LTXvkpgELyyQridYJeLKo11Iky5RHQtFZm-fPvD8dfFBdyePAf0KM5NAYQhVxUCnuT1TNqc0HioliFAR-4rLCA"
+            }
+          },
+          "c_nonce": "cnonce_b3073407a3fa24c63e7ad216c296df12",
+          "c_nonce_expires_in": 86400,
+          "format": "ldp_vc"
+        },
+        "status": "SUCCESS",
+        "durationMs": 4,
+        "timestamp": "2026-10-24T15:08:27.166Z",
+        "notes": "Successfully signed ldp_vc using EdDSA"
+      },
+      {
+        "stepIndex": 4,
+        "id": "step_4",
+        "title": "OpenID4VP Authorization Request (Presentation Definition)",
+        "source": "Verifier",
+        "target": "Wallet",
+        "protocol": "OpenID4VP",
+        "endpoint": "/api/verifier/presentation-request",
+        "method": "GET",
+        "requestPayload": {
+          "verifierId": "inji-verify",
+          "format": "ldp_vc"
+        },
+        "responsePayload": {
+          "request": {
+            "client_id": "http://localhost:4000/verifier/inji-verify",
+            "response_uri": "http://localhost:4000/api/verifier/response",
+            "response_type": "vp_token",
+            "response_mode": "direct_post",
+            "nonce": "v_nonce_2543470ff071892b50ac3e5392491d56",
+            "state": "state_4d46c8fe87c821387e438a94c286a4e2",
+            "presentation_definition": {
+              "id": "pd_mosip_national_id_1792854507167",
+              "input_descriptors": [
+                {
+                  "id": "identity_credential_descriptor",
+                  "purpose": "Verify subject identity attributes according to ecosystem rules",
+                  "format": {
+                    "ldp_vc": {
+                      "proof_type": [
+                        "Ed25519Signature2020",
+                        "RsaSignature2018"
+                      ],
+                      "alg": [
+                        "EdDSA",
+                        "ES256",
+                        "RS256"
+                      ]
+                    }
+                  },
+                  "constraints": {
+                    "fields": [
+                      {
+                        "path": [
+                          "$.credentialSubject.fullName",
+                          "$.fullName",
+                          "$[\"org.iso.18013.5.1\"].family_name",
+                          "$[\"org.iso.18013.5.1\"].given_name"
+                        ],
+                        "purpose": "Legal full name of identity holder"
+                      },
+                      {
+                        "path": [
+                          "$.credentialSubject.uin",
+                          "$.uin",
+                          "$[\"org.iso.18013.5.1\"].document_number"
+                        ],
+                        "purpose": "Unique National Identity Number"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "client_metadata": {
+              "client_name": "Inji Verify Service",
+              "logo_uri": "https://inji.io/logo.png"
+            }
+          },
+          "deepLink": "openid4vp://?client_id=http%3A%2F%2Flocalhost%3A4000%2Fverifier%2Finji-verify&response_uri=http%3A%2F%2Flocalhost%3A4000%2Fapi%2Fverifier%2Fresponse&nonce=v_nonce_2543470ff071892b50ac3e5392491d56&state=state_4d46c8fe87c821387e438a94c286a4e2&presentation_definition=%7B%22id%22%3A%22pd_mosip_national_id_1792854507167%22%2C%22input_descriptors%22%3A%5B%7B%22id%22%3A%22identity_credential_descriptor%22%2C%22purpose%22%3A%22Verify%20subject%20identity%20attributes%20according%20to%20ecosystem%20rules%22%2C%22format%22%3A%7B%22ldp_vc%22%3A%7B%22proof_type%22%3A%5B%22Ed25519Signature2020%22%2C%22RsaSignature2018%22%5D%2C%22alg%22%3A%5B%22EdDSA%22%2C%22ES256%22%2C%22RS256%22%5D%7D%7D%2C%22constraints%22%3A%7B%22fields%22%3A%5B%7B%22path%22%3A%5B%22%24.credentialSubject.fullName%22%2C%22%24.fullName%22%2C%22%24%5B%5C%22org.iso.18013.5.1%5C%22%5D.family_name%22%2C%22%24%5B%5C%22org.iso.18013.5.1%5C%22%5D.given_name%22%5D%2C%22purpose%22%3A%22Legal%20full%20name%20of%20identity%20holder%22%7D%2C%7B%22path%22%3A%5B%22%24.credentialSubject.uin%22%2C%22%24.uin%22%2C%22%24%5B%5C%22org.iso.18013.5.1%5C%22%5D.document_number%22%5D%2C%22purpose%22%3A%22Unique%20National%20Identity%20Number%22%7D%5D%7D%7D%5D%7D",
+          "qrPayload": "openid4vp://?client_id=http%3A%2F%2Flocalhost%3A4000%2Fverifier%2Finji-verify&response_uri=http%3A%2F%2Flocalhost%3A4000%2Fapi%2Fverifier%2Fresponse&nonce=v_nonce_2543470ff071892b50ac3e5392491d56&state=state_4d46c8fe87c821387e438a94c286a4e2&presentation_definition=%7B%22id%22%3A%22pd_mosip_national_id_1792854507167%22%2C%22input_descriptors%22%3A%5B%7B%22id%22%3A%22identity_credential_descriptor%22%2C%22purpose%22%3A%22Verify%20subject%20identity%20attributes%20according%20to%20ecosystem%20rules%22%2C%22format%22%3A%7B%22ldp_vc%22%3A%7B%22proof_type%22%3A%5B%22Ed25519Signature2020%22%2C%22RsaSignature2018%22%5D%2C%22alg%22%3A%5B%22EdDSA%22%2C%22ES256%22%2C%22RS256%22%5D%7D%7D%2C%22constraints%22%3A%7B%22fields%22%3A%5B%7B%22path%22%3A%5B%22%24.credentialSubject.fullName%22%2C%22%24.fullName%22%2C%22%24%5B%5C%22org.iso.18013.5.1%5C%22%5D.family_name%22%2C%22%24%5B%5C%22org.iso.18013.5.1%5C%22%5D.given_name%22%5D%2C%22purpose%22%3A%22Legal%20full%20name%20of%20identity%20holder%22%7D%2C%7B%22path%22%3A%5B%22%24.credentialSubject.uin%22%2C%22%24.uin%22%2C%22%24%5B%5C%22org.iso.18013.5.1%5C%22%5D.document_number%22%5D%2C%22purpose%22%3A%22Unique%20National%20Identity%20Number%22%7D%5D%7D%7D%5D%7D"
+        },
+        "status": "SUCCESS",
+        "durationMs": 0,
+        "timestamp": "2026-10-24T15:08:27.167Z",
+        "notes": "Generated Presentation Definition pd_mosip_national_id_1792854507167 with challenge nonce"
+      },
+      {
+        "stepIndex": 5,
+        "id": "step_5",
+        "title": "Wallet Presentation Submission (direct_post)",
+        "source": "Wallet",
+        "target": "Verifier",
+        "protocol": "OpenID4VP",
+        "endpoint": "http://localhost:4000/api/verifier/response",
+        "method": "POST",
+        "requestPayload": {
+          "vp_token": {
+            "@context": [
+              "https://www.w3.org/2018/credentials/v1"
+            ],
+            "id": "urn:uuid:0e282783-32a6-4866-9d12-3e171765f36f",
+            "type": [
+              "VerifiablePresentation"
+            ],
+            "verifiableCredential": [
+              {
+                "@context": [
+                  "https://www.w3.org/2018/credentials/v1",
+                  "https://schema.mosip.io/credentials/v1"
+                ],
+                "id": "urn:uuid:d00b9cc7-d27c-41cc-a85d-4f31bf5c48cd",
+                "type": [
+                  "VerifiableCredential",
+                  "MosipNationalIdCredential"
+                ],
+                "issuer": "did:key:z6MknSLvTRWVcWNNqdSJtdj6ELPSejwLQbdzSnYsuvicwbKi",
+                "issuanceDate": "2026-10-24T15:08:27.164Z",
+                "validUntil": "2027-10-24T15:08:27.164Z",
+                "credentialSubject": {
+                  "id": "did:jwk:eyJjcnYiOiJFZDI1NTE5IiwieCI6IkQ5c1pUUlExMk00UTlJY3VoVkd6R1JNRUFESkpSUU1TWmZsdlk1VUtzYnciLCJrdHkiOiJPS1AiLCJraWQiOiJpbmppLWhvbGRlci1kZXZpY2Uta2V5LTAxIn0",
+                  "uin": "9876-5432-1098",
+                  "fullName": "Amina Al-Mansoor",
+                  "birthDate": "1994-08-15",
+                  "gender": "Female",
+                  "nationality": "Morocco",
+                  "address": "12 Boulevard Mohammed V, Rabat"
+                },
+                "proof": {
+                  "type": "Ed25519Signature2020",
+                  "created": "2026-10-24T15:08:27.164Z",
+                  "verificationMethod": "did:key:z6MknSLvTRWVcWNNqdSJtdj6ELPSejwLQbdzSnYsuvicwbKi#inji-certify-ed25519-key-01",
+                  "proofPurpose": "assertionMethod",
+                  "jws": "eyJhbGciOiJFZERTQSIsImtpZCI6ImluamktY2VydGlmeS1lZDI1NTE5LWtleS0wMSJ9.sQnqFGuqW4qvBWD9gVAy3dx8_G1d2b1k9pBOUKB789s.LTXvkpgELyyQridYJeLKo11Iky5RHQtFZm-fPvD8dfFBdyePAf0KM5NAYQhVxUCnuT1TNqc0HioliFAR-4rLCA"
+                }
+              }
+            ],
+            "holder": "did:key:z6MkfX9w55dZjG5YCNGhMzqkPwcWwQWgU6pQRKZTJ15HagTu",
+            "proof": {
+              "type": "Ed25519Signature2020",
+              "created": "2026-10-24T15:08:27.168Z",
+              "challenge": "v_nonce_2543470ff071892b50ac3e5392491d56",
+              "domain": "http://localhost:4000/verifier/inji-verify",
+              "verificationMethod": "did:key:z6MkfX9w55dZjG5YCNGhMzqkPwcWwQWgU6pQRKZTJ15HagTu#inji-holder-device-key-01",
+              "proofPurpose": "authentication",
+              "jws": "eyJhbGciOiJFZERTQSIsImtpZCI6ImluamktaG9sZGVyLWRldmljZS1rZXktMDEifQ.y5Scj9v7Yink11f_NaJMkPuZzoar6q8kUtcoM20j0OE.zL06oMMWUgdm4p9v_cVeIc625Sk5bUtLffJ8Gum4J1NtFwc6Lt-Ytwa-LURKFF10bAe74i7kz0g3P3VktQTiBw"
+            }
+          },
+          "presentation_submission": {
+            "id": "sub_aea07f0e-3d40-4a7c-8656-3c2b6f258023",
+            "definition_id": "pd_mosip_national_id_1792854507167",
+            "descriptor_map": [
+              {
+                "id": "identity_credential_descriptor",
+                "format": "ldp_vc",
+                "path": "$"
+              }
+            ]
+          },
+          "state": "state_4d46c8fe87c821387e438a94c286a4e2"
+        },
+        "responsePayload": {
+          "status": "SUBMITTED"
+        },
+        "status": "SUCCESS",
+        "durationMs": 4,
+        "timestamp": "2026-10-24T15:08:27.172Z",
+        "notes": "Submitted ldp_vc vp_token bound to nonce v_nonce_2543470ff071892b50ac3e5392491d56"
+      },
+      {
+        "stepIndex": 6,
+        "id": "step_6",
+        "title": "Verifier Cryptographic Verification Result",
+        "source": "Verifier",
+        "target": "Orchestrator",
+        "protocol": "OpenID4VP",
+        "endpoint": "/api/verifier/verify",
+        "method": "EVALUATE",
+        "requestPayload": {
+          "state": "state_4d46c8fe87c821387e438a94c286a4e2"
+        },
+        "responsePayload": {
+          "status": "VALID",
+          "isValid": true,
+          "issuerId": "inji-certify-ed25519-key-01",
+          "format": "ldp_vc",
+          "profileId": "MOSIP_NATIONAL_ID",
+          "verifiedClaims": {
+            "id": "did:jwk:eyJjcnYiOiJFZDI1NTE5IiwieCI6IkQ5c1pUUlExMk00UTlJY3VoVkd6R1JNRUFESkpSUU1TWmZsdlk1VUtzYnciLCJrdHkiOiJPS1AiLCJraWQiOiJpbmppLWhvbGRlci1kZXZpY2Uta2V5LTAxIn0",
+            "uin": "9876-5432-1098",
+            "fullName": "Amina Al-Mansoor",
+            "birthDate": "1994-08-15",
+            "gender": "Female",
+            "nationality": "Morocco",
+            "address": "12 Boulevard Mohammed V, Rabat"
+          },
+          "disclosedClaimsCount": 7,
+          "hiddenClaimsCount": 0,
+          "checks": [
+            {
+              "name": "Presentation Submission Descriptor Match",
+              "passed": true,
+              "message": "Descriptor mapped to pd_mosip_national_id_1792854507167"
+            },
+            {
+              "name": "Presentation Structure",
+              "passed": true,
+              "message": "Valid W3C VP format"
+            },
+            {
+              "name": "Proof Challenge (Nonce) Match",
+              "passed": true,
+              "message": "Challenge matched: v_nonce_2543470ff071892b50ac3e5392491d56"
+            },
+            {
+              "name": "Proof Domain (Audience) Match",
+              "passed": true,
+              "message": "Domain matched: http://localhost:4000/verifier/inji-verify"
+            },
+            {
+              "name": "Holder Authentication Signature",
+              "passed": true,
+              "message": "Holder Ed25519 proof signature verified cryptographically"
+            },
+            {
+              "name": "Credential Temporal Validity",
+              "passed": true,
+              "message": "Valid until 2027-10-24T15:08:27.164Z"
+            },
+            {
+              "name": "Issuer Cryptographic Signature",
+              "passed": true,
+              "message": "Credential verified against issuer did:key:z6MknSLvTRWVcWNNqdSJtdj6ELPSejwLQbdzSnYsuvicwbKi using EdDSA"
+            },
+            {
+              "name": "Credential Revocation Status Check",
+              "passed": true,
+              "message": "Credential status is ACTIVE (not revoked)"
+            }
+          ],
+          "errors": [],
+          "warnings": [],
+          "latencyMs": 3,
+          "timestamp": "2026-10-24T15:08:27.175Z",
+          "cryptographicDetails": {
+            "algorithm": "EdDSA",
+            "issuerKeyId": "inji-certify-ed25519-key-01",
+            "holderBindingVerified": true,
+            "replayProtectionVerified": true,
+            "notExpired": true,
+            "revocationStatusVerified": true
+          }
+        },
+        "status": "SUCCESS",
+        "durationMs": 3,
+        "timestamp": "2026-10-24T15:08:27.175Z",
+        "notes": "Verification evaluated to status VALID"
+      }
+    ],
+    "verificationResult": {
+      "status": "VALID",
+      "isValid": true,
+      "issuerId": "inji-certify-ed25519-key-01",
+      "format": "ldp_vc",
+      "profileId": "MOSIP_NATIONAL_ID",
+      "verifiedClaims": {
+        "id": "did:jwk:eyJjcnYiOiJFZDI1NTE5IiwieCI6IkQ5c1pUUlExMk00UTlJY3VoVkd6R1JNRUFESkpSUU1TWmZsdlk1VUtzYnciLCJrdHkiOiJPS1AiLCJraWQiOiJpbmppLWhvbGRlci1kZXZpY2Uta2V5LTAxIn0",
+        "uin": "9876-5432-1098",
+        "fullName": "Amina Al-Mansoor",
+        "birthDate": "1994-08-15",
+        "gender": "Female",
+        "nationality": "Morocco",
+        "address": "12 Boulevard Mohammed V, Rabat"
+      },
+      "disclosedClaimsCount": 7,
+      "hiddenClaimsCount": 0,
+      "checks": [
+        {
+          "name": "Presentation Submission Descriptor Match",
+          "passed": true,
+          "message": "Descriptor mapped to pd_mosip_national_id_1792854507167"
+        },
+        {
+          "name": "Presentation Structure",
+          "passed": true,
+          "message": "Valid W3C VP format"
+        },
+        {
+          "name": "Proof Challenge (Nonce) Match",
+          "passed": true,
+          "message": "Challenge matched: v_nonce_2543470ff071892b50ac3e5392491d56"
+        },
+        {
+          "name": "Proof Domain (Audience) Match",
+          "passed": true,
+          "message": "Domain matched: http://localhost:4000/verifier/inji-verify"
+        },
+        {
+          "name": "Holder Authentication Signature",
+          "passed": true,
+          "message": "Holder Ed25519 proof signature verified cryptographically"
+        },
+        {
+          "name": "Credential Temporal Validity",
+          "passed": true,
+          "message": "Valid until 2027-10-24T15:08:27.164Z"
+        },
+        {
+          "name": "Issuer Cryptographic Signature",
+          "passed": true,
+          "message": "Credential verified against issuer did:key:z6MknSLvTRWVcWNNqdSJtdj6ELPSejwLQbdzSnYsuvicwbKi using EdDSA"
+        },
+        {
+          "name": "Credential Revocation Status Check",
+          "passed": true,
+          "message": "Credential status is ACTIVE (not revoked)"
+        }
+      ],
+      "errors": [],
+      "warnings": [],
+      "latencyMs": 3,
+      "timestamp": "2026-10-24T15:08:27.175Z",
+      "cryptographicDetails": {
+        "algorithm": "EdDSA",
+        "issuerKeyId": "inji-certify-ed25519-key-01",
+        "holderBindingVerified": true,
+        "replayProtectionVerified": true,
+        "notExpired": true,
+        "revocationStatusVerified": true
+      }
+    }
+  },
+  {
+    "id": "run_fbf09049-f1db-4ab6-93f5-7d1c9b33ada8",
+    "timestamp": "2026-10-24T15:08:01.452Z",
+    "issuer": {
+      "id": "inji-certify",
+      "name": "Inji Certify (MOSIP Core)",
+      "version": "v0.12.0"
+    },
+    "wallet": {
+      "id": "inji-web",
+      "name": "Inji Web (Browser Wallet)",
+      "version": "v0.9.1"
+    },
+    "verifier": {
+      "id": "inji-verify",
+      "name": "Inji Verify (MOSIP Core)",
+      "version": "v0.10.4"
+    },
+    "format": "ldp_vc",
+    "profile": "MOSIP_NATIONAL_ID",
+    "tamperScenario": "NONE",
+    "outcome": "VALID",
+    "passed": true,
+    "durationMs": 21,
+    "steps": [
+      {
+        "stepIndex": 1,
+        "id": "step_1",
+        "title": "Issue Credential Offer (OpenID4VCI)",
+        "source": "Issuer",
+        "target": "Wallet",
+        "protocol": "OpenID4VCI",
+        "endpoint": "/api/issuer/offer",
+        "method": "POST",
+        "requestPayload": {
+          "issuerId": "inji-certify",
+          "format": "ldp_vc",
+          "profileId": "MOSIP_NATIONAL_ID"
+        },
+        "responsePayload": {
+          "credential_offer": {
+            "credential_issuer": "http://localhost:4000",
+            "credentials": [
+              "MosipNationalId_ldp_vc"
+            ],
+            "grants": {
+              "urn:ietf:params:oauth:grant-type:pre-authorized_code": {
+                "pre-authorized_code": "pac_3ae81660d35e355e0fa492742ddd2693",
+                "user_pin_required": false
+              }
+            }
+          },
+          "offer_uri": "openid-credential-offer://?credential_offer=%7B%22credential_issuer%22%3A%22http%3A%2F%2Flocalhost%3A4000%22%2C%22credentials%22%3A%5B%22MosipNationalId_ldp_vc%22%5D%2C%22grants%22%3A%7B%22urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code%22%3A%7B%22pre-authorized_code%22%3A%22pac_3ae81660d35e355e0fa492742ddd2693%22%2C%22user_pin_required%22%3Afalse%7D%7D%7D"
+        },
+        "status": "SUCCESS",
+        "durationMs": 1,
+        "timestamp": "2026-10-24T15:08:01.432Z",
+        "notes": "Initiated OpenID4VCI draft 13 pre-authorized code flow"
+      },
+      {
+        "stepIndex": 2,
+        "id": "step_2",
+        "title": "OAuth 2.0 Token Exchange",
+        "source": "Wallet",
+        "target": "Issuer",
+        "protocol": "OpenID4VCI",
+        "endpoint": "/api/issuer/token",
+        "method": "POST",
+        "requestPayload": {
+          "grant_type": "urn:ietf:params:oauth:grant-type:pre-authorized_code",
+          "pre-authorized_code": "pac_3ae81660d35e355e0fa492742ddd2693"
+        },
+        "responsePayload": {
+          "access_token": "at_84da22f7157d08d0dd90d54f5ff340757671aaade7699807",
+          "token_type": "Bearer",
+          "expires_in": 3600,
+          "c_nonce": "cnonce_5b518cdd16b862cc163f9dd3193f8073",
+          "c_nonce_expires_in": 86400
+        },
+        "status": "SUCCESS",
+        "durationMs": 0,
+        "timestamp": "2026-10-24T15:08:01.433Z",
+        "notes": "Issued bearer access token and c_nonce: cnonce_5b518cdd16b862cc163f9dd3193f8073"
+      },
+      {
+        "stepIndex": 3,
+        "id": "step_3",
+        "title": "Credential Issuance Request & Cryptographic Signing",
+        "source": "Wallet",
+        "target": "Issuer",
+        "protocol": "OpenID4VCI",
+        "endpoint": "/api/issuer/credential",
+        "method": "POST",
+        "requestPayload": {
+          "format": "ldp_vc",
+          "proof": {
+            "proof_type": "jwt",
+            "jwt": "eyJhbGciOiJFZERTQSIsInR5cCI6Im9wZW5pZDR2Y2ktcHJvb2Yrand0IiwiandrIjp7ImNydiI6IkVkMjU1MTkiLCJ4IjoiRDlzWlRSUTEyTTRROUljdWhWR3pHUk1FQURKSlJRTVNaZmx2WTVVS3NidyIsImt0eSI6Ik9LUCIsImtpZCI6ImluamktaG9sZGVyLWRldmljZS1rZXktMDEifX0.eyJpc3MiOiJkaWQ6a2V5Ono2TWtmWDl3NTVkWmpHNVlDTkdoTXpxa1B3Y1d3UVdnVTZwUVJLWlRKMTVIYWdUdSIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NDAwMCIsImlhdCI6MTc5Mjg1NDQ4MSwibm9uY2UiOiJjbm9uY2VfNWI1MThjZGQxNmI4NjJjYzE2M2Y5ZGQzMTkzZjgwNzMifQ.Euxjvdp9TAZu-xcqsy_Cg8clYp5Wte2UTQeNVyvDPrjx2N2B2F5WWZffjbCXDGNwjhWe-_uT-GmvrtJ85vsqBw"
+          }
+        },
+        "responsePayload": {
+          "credential": {
+            "@context": [
+              "https://www.w3.org/2018/credentials/v1",
+              "https://schema.mosip.io/credentials/v1"
+            ],
+            "id": "urn:uuid:0f93f743-415e-4a93-a130-408c72ee018a",
+            "type": [
+              "VerifiableCredential",
+              "MosipNationalIdCredential"
+            ],
+            "issuer": "did:key:z6MknSLvTRWVcWNNqdSJtdj6ELPSejwLQbdzSnYsuvicwbKi",
+            "issuanceDate": "2026-10-24T15:08:01.440Z",
+            "validUntil": "2027-10-24T15:08:01.440Z",
+            "credentialSubject": {
+              "id": "did:jwk:eyJjcnYiOiJFZDI1NTE5IiwieCI6IkQ5c1pUUlExMk00UTlJY3VoVkd6R1JNRUFESkpSUU1TWmZsdlk1VUtzYnciLCJrdHkiOiJPS1AiLCJraWQiOiJpbmppLWhvbGRlci1kZXZpY2Uta2V5LTAxIn0",
+              "uin": "9876-5432-1098",
+              "fullName": "Amina Al-Mansoor",
+              "birthDate": "1994-08-15",
+              "gender": "Female",
+              "nationality": "Morocco",
+              "address": "12 Boulevard Mohammed V, Rabat"
+            },
+            "proof": {
+              "type": "Ed25519Signature2020",
+              "created": "2026-10-24T15:08:01.440Z",
+              "verificationMethod": "did:key:z6MknSLvTRWVcWNNqdSJtdj6ELPSejwLQbdzSnYsuvicwbKi#inji-certify-ed25519-key-01",
+              "proofPurpose": "assertionMethod",
+              "jws": "eyJhbGciOiJFZERTQSIsImtpZCI6ImluamktY2VydGlmeS1lZDI1NTE5LWtleS0wMSJ9.kb0wfbr3FjYa-L-5bbkvwwVQYgaWmUHau_iq3BcfQc0.AfdN5QVzExIXIUDcssve69LOHyR7d8FdhslHsIs31mYdHkE0S2x0uPlpnsGA5vFlK5nClFTAftSwZ03bX6nmCw"
+            }
+          },
+          "c_nonce": "cnonce_600202e064ef84e93aeab059a37d0f5a",
+          "c_nonce_expires_in": 86400,
+          "format": "ldp_vc"
+        },
+        "status": "SUCCESS",
+        "durationMs": 9,
+        "timestamp": "2026-10-24T15:08:01.442Z",
+        "notes": "Successfully signed ldp_vc using EdDSA"
+      },
+      {
+        "stepIndex": 4,
+        "id": "step_4",
+        "title": "OpenID4VP Authorization Request (Presentation Definition)",
+        "source": "Verifier",
+        "target": "Wallet",
+        "protocol": "OpenID4VP",
+        "endpoint": "/api/verifier/presentation-request",
+        "method": "GET",
+        "requestPayload": {
+          "verifierId": "inji-verify",
+          "format": "ldp_vc"
+        },
+        "responsePayload": {
+          "request": {
+            "client_id": "http://localhost:4000/verifier/inji-verify",
+            "response_uri": "http://localhost:4000/api/verifier/response",
+            "response_type": "vp_token",
+            "response_mode": "direct_post",
+            "nonce": "v_nonce_1115dd7a6b8af78cc916bb0c79c2f55b",
+            "state": "state_82da59c4a956882b1db4f94a8380b16e",
+            "presentation_definition": {
+              "id": "pd_mosip_national_id_1792854481442",
+              "input_descriptors": [
+                {
+                  "id": "identity_credential_descriptor",
+                  "purpose": "Verify subject identity attributes according to ecosystem rules",
+                  "format": {
+                    "ldp_vc": {
+                      "proof_type": [
+                        "Ed25519Signature2020",
+                        "RsaSignature2018"
+                      ],
+                      "alg": [
+                        "EdDSA",
+                        "ES256",
+                        "RS256"
+                      ]
+                    }
+                  },
+                  "constraints": {
+                    "fields": [
+                      {
+                        "path": [
+                          "$.credentialSubject.fullName",
+                          "$.fullName",
+                          "$[\"org.iso.18013.5.1\"].family_name",
+                          "$[\"org.iso.18013.5.1\"].given_name"
+                        ],
+                        "purpose": "Legal full name of identity holder"
+                      },
+                      {
+                        "path": [
+                          "$.credentialSubject.uin",
+                          "$.uin",
+                          "$[\"org.iso.18013.5.1\"].document_number"
+                        ],
+                        "purpose": "Unique National Identity Number"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "client_metadata": {
+              "client_name": "Inji Verify Service",
+              "logo_uri": "https://inji.io/logo.png"
+            }
+          },
+          "deepLink": "openid4vp://?client_id=http%3A%2F%2Flocalhost%3A4000%2Fverifier%2Finji-verify&response_uri=http%3A%2F%2Flocalhost%3A4000%2Fapi%2Fverifier%2Fresponse&nonce=v_nonce_1115dd7a6b8af78cc916bb0c79c2f55b&state=state_82da59c4a956882b1db4f94a8380b16e&presentation_definition=%7B%22id%22%3A%22pd_mosip_national_id_1792854481442%22%2C%22input_descriptors%22%3A%5B%7B%22id%22%3A%22identity_credential_descriptor%22%2C%22purpose%22%3A%22Verify%20subject%20identity%20attributes%20according%20to%20ecosystem%20rules%22%2C%22format%22%3A%7B%22ldp_vc%22%3A%7B%22proof_type%22%3A%5B%22Ed25519Signature2020%22%2C%22RsaSignature2018%22%5D%2C%22alg%22%3A%5B%22EdDSA%22%2C%22ES256%22%2C%22RS256%22%5D%7D%7D%2C%22constraints%22%3A%7B%22fields%22%3A%5B%7B%22path%22%3A%5B%22%24.credentialSubject.fullName%22%2C%22%24.fullName%22%2C%22%24%5B%5C%22org.iso.18013.5.1%5C%22%5D.family_name%22%2C%22%24%5B%5C%22org.iso.18013.5.1%5C%22%5D.given_name%22%5D%2C%22purpose%22%3A%22Legal%20full%20name%20of%20identity%20holder%22%7D%2C%7B%22path%22%3A%5B%22%24.credentialSubject.uin%22%2C%22%24.uin%22%2C%22%24%5B%5C%22org.iso.18013.5.1%5C%22%5D.document_number%22%5D%2C%22purpose%22%3A%22Unique%20National%20Identity%20Number%22%7D%5D%7D%7D%5D%7D",
+          "qrPayload": "openid4vp://?client_id=http%3A%2F%2Flocalhost%3A4000%2Fverifier%2Finji-verify&response_uri=http%3A%2F%2Flocalhost%3A4000%2Fapi%2Fverifier%2Fresponse&nonce=v_nonce_1115dd7a6b8af78cc916bb0c79c2f55b&state=state_82da59c4a956882b1db4f94a8380b16e&presentation_definition=%7B%22id%22%3A%22pd_mosip_national_id_1792854481442%22%2C%22input_descriptors%22%3A%5B%7B%22id%22%3A%22identity_credential_descriptor%22%2C%22purpose%22%3A%22Verify%20subject%20identity%20attributes%20according%20to%20ecosystem%20rules%22%2C%22format%22%3A%7B%22ldp_vc%22%3A%7B%22proof_type%22%3A%5B%22Ed25519Signature2020%22%2C%22RsaSignature2018%22%5D%2C%22alg%22%3A%5B%22EdDSA%22%2C%22ES256%22%2C%22RS256%22%5D%7D%7D%2C%22constraints%22%3A%7B%22fields%22%3A%5B%7B%22path%22%3A%5B%22%24.credentialSubject.fullName%22%2C%22%24.fullName%22%2C%22%24%5B%5C%22org.iso.18013.5.1%5C%22%5D.family_name%22%2C%22%24%5B%5C%22org.iso.18013.5.1%5C%22%5D.given_name%22%5D%2C%22purpose%22%3A%22Legal%20full%20name%20of%20identity%20holder%22%7D%2C%7B%22path%22%3A%5B%22%24.credentialSubject.uin%22%2C%22%24.uin%22%2C%22%24%5B%5C%22org.iso.18013.5.1%5C%22%5D.document_number%22%5D%2C%22purpose%22%3A%22Unique%20National%20Identity%20Number%22%7D%5D%7D%7D%5D%7D"
+        },
+        "status": "SUCCESS",
+        "durationMs": 1,
+        "timestamp": "2026-10-24T15:08:01.443Z",
+        "notes": "Generated Presentation Definition pd_mosip_national_id_1792854481442 with challenge nonce"
+      },
+      {
+        "stepIndex": 5,
+        "id": "step_5",
+        "title": "Wallet Presentation Submission (direct_post)",
+        "source": "Wallet",
+        "target": "Verifier",
+        "protocol": "OpenID4VP",
+        "endpoint": "http://localhost:4000/api/verifier/response",
+        "method": "POST",
+        "requestPayload": {
+          "vp_token": {
+            "@context": [
+              "https://www.w3.org/2018/credentials/v1"
+            ],
+            "id": "urn:uuid:b8ec32f6-83db-4b4b-89f4-08b97514a7a4",
+            "type": [
+              "VerifiablePresentation"
+            ],
+            "verifiableCredential": [
+              {
+                "@context": [
+                  "https://www.w3.org/2018/credentials/v1",
+                  "https://schema.mosip.io/credentials/v1"
+                ],
+                "id": "urn:uuid:0f93f743-415e-4a93-a130-408c72ee018a",
+                "type": [
+                  "VerifiableCredential",
+                  "MosipNationalIdCredential"
+                ],
+                "issuer": "did:key:z6MknSLvTRWVcWNNqdSJtdj6ELPSejwLQbdzSnYsuvicwbKi",
+                "issuanceDate": "2026-10-24T15:08:01.440Z",
+                "validUntil": "2027-10-24T15:08:01.440Z",
+                "credentialSubject": {
+                  "id": "did:jwk:eyJjcnYiOiJFZDI1NTE5IiwieCI6IkQ5c1pUUlExMk00UTlJY3VoVkd6R1JNRUFESkpSUU1TWmZsdlk1VUtzYnciLCJrdHkiOiJPS1AiLCJraWQiOiJpbmppLWhvbGRlci1kZXZpY2Uta2V5LTAxIn0",
+                  "uin": "9876-5432-1098",
+                  "fullName": "Amina Al-Mansoor",
+                  "birthDate": "1994-08-15",
+                  "gender": "Female",
+                  "nationality": "Morocco",
+                  "address": "12 Boulevard Mohammed V, Rabat"
+                },
+                "proof": {
+                  "type": "Ed25519Signature2020",
+                  "created": "2026-10-24T15:08:01.440Z",
+                  "verificationMethod": "did:key:z6MknSLvTRWVcWNNqdSJtdj6ELPSejwLQbdzSnYsuvicwbKi#inji-certify-ed25519-key-01",
+                  "proofPurpose": "assertionMethod",
+                  "jws": "eyJhbGciOiJFZERTQSIsImtpZCI6ImluamktY2VydGlmeS1lZDI1NTE5LWtleS0wMSJ9.kb0wfbr3FjYa-L-5bbkvwwVQYgaWmUHau_iq3BcfQc0.AfdN5QVzExIXIUDcssve69LOHyR7d8FdhslHsIs31mYdHkE0S2x0uPlpnsGA5vFlK5nClFTAftSwZ03bX6nmCw"
+                }
+              }
+            ],
+            "holder": "did:key:z6MkfX9w55dZjG5YCNGhMzqkPwcWwQWgU6pQRKZTJ15HagTu",
+            "proof": {
+              "type": "Ed25519Signature2020",
+              "created": "2026-10-24T15:08:01.444Z",
+              "challenge": "v_nonce_1115dd7a6b8af78cc916bb0c79c2f55b",
+              "domain": "http://localhost:4000/verifier/inji-verify",
+              "verificationMethod": "did:key:z6MkfX9w55dZjG5YCNGhMzqkPwcWwQWgU6pQRKZTJ15HagTu#inji-holder-device-key-01",
+              "proofPurpose": "authentication",
+              "jws": "eyJhbGciOiJFZERTQSIsImtpZCI6ImluamktaG9sZGVyLWRldmljZS1rZXktMDEifQ.6GxkUF2t5W--9RgCwTGg4tYqoPqBtQY_wm8DBailqr8.SJfNxxf33KPMK_dNxd7CLJAYcz0hvP9yk22d-s_JuxBgE4Ysxov8jvfrBj5YxMj35mD3jKYcabWAidN-W5bUBw"
+            }
+          },
+          "presentation_submission": {
+            "id": "sub_77bf8fdf-2dba-4a0c-8f70-5487d3733388",
+            "definition_id": "pd_mosip_national_id_1792854481442",
+            "descriptor_map": [
+              {
+                "id": "identity_credential_descriptor",
+                "format": "ldp_vc",
+                "path": "$"
+              }
+            ]
+          },
+          "state": "state_82da59c4a956882b1db4f94a8380b16e"
+        },
+        "responsePayload": {
+          "status": "SUBMITTED"
+        },
+        "status": "SUCCESS",
+        "durationMs": 1,
+        "timestamp": "2026-10-24T15:08:01.445Z",
+        "notes": "Submitted ldp_vc vp_token bound to nonce v_nonce_1115dd7a6b8af78cc916bb0c79c2f55b"
+      },
+      {
+        "stepIndex": 6,
+        "id": "step_6",
+        "title": "Verifier Cryptographic Verification Result",
+        "source": "Verifier",
+        "target": "Orchestrator",
+        "protocol": "OpenID4VP",
+        "endpoint": "/api/verifier/verify",
+        "method": "EVALUATE",
+        "requestPayload": {
+          "state": "state_82da59c4a956882b1db4f94a8380b16e"
+        },
+        "responsePayload": {
+          "status": "VALID",
+          "isValid": true,
+          "issuerId": "inji-certify-ed25519-key-01",
+          "format": "ldp_vc",
+          "profileId": "MOSIP_NATIONAL_ID",
+          "verifiedClaims": {
+            "id": "did:jwk:eyJjcnYiOiJFZDI1NTE5IiwieCI6IkQ5c1pUUlExMk00UTlJY3VoVkd6R1JNRUFESkpSUU1TWmZsdlk1VUtzYnciLCJrdHkiOiJPS1AiLCJraWQiOiJpbmppLWhvbGRlci1kZXZpY2Uta2V5LTAxIn0",
+            "uin": "9876-5432-1098",
+            "fullName": "Amina Al-Mansoor",
+            "birthDate": "1994-08-15",
+            "gender": "Female",
+            "nationality": "Morocco",
+            "address": "12 Boulevard Mohammed V, Rabat"
+          },
+          "disclosedClaimsCount": 7,
+          "hiddenClaimsCount": 0,
+          "checks": [
+            {
+              "name": "Presentation Submission Descriptor Match",
+              "passed": true,
+              "message": "Descriptor mapped to pd_mosip_national_id_1792854481442"
+            },
+            {
+              "name": "Presentation Structure",
+              "passed": true,
+              "message": "Valid W3C VP format"
+            },
+            {
+              "name": "Proof Challenge (Nonce) Match",
+              "passed": true,
+              "message": "Challenge matched: v_nonce_1115dd7a6b8af78cc916bb0c79c2f55b"
+            },
+            {
+              "name": "Proof Domain (Audience) Match",
+              "passed": true,
+              "message": "Domain matched: http://localhost:4000/verifier/inji-verify"
+            },
+            {
+              "name": "Holder Authentication Signature",
+              "passed": true,
+              "message": "Holder Ed25519 proof signature verified cryptographically"
+            },
+            {
+              "name": "Credential Temporal Validity",
+              "passed": true,
+              "message": "Valid until 2027-10-24T15:08:01.440Z"
+            },
+            {
+              "name": "Issuer Cryptographic Signature",
+              "passed": true,
+              "message": "Credential verified against issuer did:key:z6MknSLvTRWVcWNNqdSJtdj6ELPSejwLQbdzSnYsuvicwbKi using EdDSA"
+            },
+            {
+              "name": "Credential Revocation Status Check",
+              "passed": true,
+              "message": "Credential status is ACTIVE (not revoked)"
+            }
+          ],
+          "errors": [],
+          "warnings": [],
+          "latencyMs": 5,
+          "timestamp": "2026-10-24T15:08:01.451Z",
+          "cryptographicDetails": {
+            "algorithm": "EdDSA",
+            "issuerKeyId": "inji-certify-ed25519-key-01",
+            "holderBindingVerified": true,
+            "replayProtectionVerified": true,
+            "notExpired": true,
+            "revocationStatusVerified": true
+          }
+        },
+        "status": "SUCCESS",
+        "durationMs": 6,
+        "timestamp": "2026-10-24T15:08:01.451Z",
+        "notes": "Verification evaluated to status VALID"
+      }
+    ],
+    "verificationResult": {
+      "status": "VALID",
+      "isValid": true,
+      "issuerId": "inji-certify-ed25519-key-01",
+      "format": "ldp_vc",
+      "profileId": "MOSIP_NATIONAL_ID",
+      "verifiedClaims": {
+        "id": "did:jwk:eyJjcnYiOiJFZDI1NTE5IiwieCI6IkQ5c1pUUlExMk00UTlJY3VoVkd6R1JNRUFESkpSUU1TWmZsdlk1VUtzYnciLCJrdHkiOiJPS1AiLCJraWQiOiJpbmppLWhvbGRlci1kZXZpY2Uta2V5LTAxIn0",
+        "uin": "9876-5432-1098",
+        "fullName": "Amina Al-Mansoor",
+        "birthDate": "1994-08-15",
+        "gender": "Female",
+        "nationality": "Morocco",
+        "address": "12 Boulevard Mohammed V, Rabat"
+      },
+      "disclosedClaimsCount": 7,
+      "hiddenClaimsCount": 0,
+      "checks": [
+        {
+          "name": "Presentation Submission Descriptor Match",
+          "passed": true,
+          "message": "Descriptor mapped to pd_mosip_national_id_1792854481442"
+        },
+        {
+          "name": "Presentation Structure",
+          "passed": true,
+          "message": "Valid W3C VP format"
+        },
+        {
+          "name": "Proof Challenge (Nonce) Match",
+          "passed": true,
+          "message": "Challenge matched: v_nonce_1115dd7a6b8af78cc916bb0c79c2f55b"
+        },
+        {
+          "name": "Proof Domain (Audience) Match",
+          "passed": true,
+          "message": "Domain matched: http://localhost:4000/verifier/inji-verify"
+        },
+        {
+          "name": "Holder Authentication Signature",
+          "passed": true,
+          "message": "Holder Ed25519 proof signature verified cryptographically"
+        },
+        {
+          "name": "Credential Temporal Validity",
+          "passed": true,
+          "message": "Valid until 2027-10-24T15:08:01.440Z"
+        },
+        {
+          "name": "Issuer Cryptographic Signature",
+          "passed": true,
+          "message": "Credential verified against issuer did:key:z6MknSLvTRWVcWNNqdSJtdj6ELPSejwLQbdzSnYsuvicwbKi using EdDSA"
+        },
+        {
+          "name": "Credential Revocation Status Check",
+          "passed": true,
+          "message": "Credential status is ACTIVE (not revoked)"
+        }
+      ],
+      "errors": [],
+      "warnings": [],
+      "latencyMs": 5,
+      "timestamp": "2026-10-24T15:08:01.451Z",
+      "cryptographicDetails": {
+        "algorithm": "EdDSA",
+        "issuerKeyId": "inji-certify-ed25519-key-01",
+        "holderBindingVerified": true,
+        "replayProtectionVerified": true,
+        "notExpired": true,
+        "revocationStatusVerified": true
+      }
+    }
+  },
+  {
     "id": "run_5020ec45-4098-4caa-90d7-60a85653771a",
     "timestamp": "2026-10-24T14:17:28.254Z",
     "issuer": {
