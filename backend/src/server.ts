@@ -53,7 +53,7 @@ async function bootstrap() {
     console.log(`  - Inji Wallet Holder: ${keys.injiWalletHolder.did} (${keys.injiWalletHolder.alg})`);
     console.log(`  - Inji Verifier: ${keys.injiVerifier.did} (${keys.injiVerifier.alg})`);
 
-    server.listen(PORT, '0.0.0.0', () => {
+    server.listen(PORT, () => {
       console.log(`=======================================================`);
       console.log(`🚀 Inji Interoperability Playground Backend running on:`);
       console.log(`   http://localhost:${PORT}`);
