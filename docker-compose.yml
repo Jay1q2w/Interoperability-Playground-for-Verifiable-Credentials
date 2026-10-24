@@ -1,10 +1,8 @@
-version: '3.8'
-
 services:
   backend:
     build:
       context: ./backend
-      dockerfile: ../Dockerfile.backend
+      dockerfile: Dockerfile
     container_name: inji-interop-backend
     restart: unless-stopped
     ports:
@@ -24,7 +22,7 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: ../Dockerfile.frontend
+      dockerfile: Dockerfile
     container_name: inji-interop-frontend
     restart: unless-stopped
     ports:
