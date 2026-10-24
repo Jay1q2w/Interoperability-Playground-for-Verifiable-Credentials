@@ -1,0 +1,63 @@
+name: Inji Interoperability Matrix CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  schedule:
+    # Run nightly at 02:00 UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  interop-test-matrix:
+    name: Run Interoperability Matrix & Negative-Path Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install Backend Dependencies
+        working-directory: ./backend
+        run: npm ci
+
+      - name: Build Backend Service
+        working-directory: ./backend
+        run: npm run build
+
+      - name: Execute Full Interoperability Test Suite (Jest)
+        working-directory: ./backend
+        run: npm test
+
+      - name: Generate Compatibility Matrix Artifact
+        working-directory: ./backend
+        run: |
+          node -e "
+            import('./dist/matrix/suiteRunner.js').then(async m => {
+              const res = await m.runAutomatedTestSuite();
+              console.log('Automated Suite Results:', res.passed, '/', res.total, 'passed');
+              const { matrixStore } = await import('./dist/matrix/store.js');
+              import('fs').then(fs => fs.writeFileSync('../INTEROP_MATRIX_RESULTS.md', matrixStore.exportMarkdownReport()));
+            });
+          "
+
+      - name: Upload Interop Compatibility Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: inji-interop-matrix-report
+          path: INTEROP_MATRIX_RESULTS.md
+
+      - name: Install Frontend Dependencies & Verify Build
+        working-directory: ./frontend
+        run: |
+          npm ci
+          npm run build
