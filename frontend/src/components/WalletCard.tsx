@@ -152,7 +152,7 @@ export const WalletCard: React.FC<WalletCardProps> = ({
                   <span className="text-blue-100">Evaluating Presentation Proofs...</span>
                 </>
               ) : (
-                <span>Submit Presentation (direct_post)</span>
+                <span>Present Disclosed Claims to Verifier</span>
               )}
             </button>
 
