@@ -201,7 +201,7 @@ export const ProtocolInspector: React.FC<ProtocolInspectorProps> = ({
       )}
 
       {/* Code Canvas */}
-      <div className="bg-zinc-900/20 rounded-lg p-4 border border-zinc-850 flex-1 overflow-auto max-h-[440px] font-mono text-xs leading-relaxed">
+      <div className="bg-zinc-900/20 rounded-lg p-4 border border-zinc-850 flex-1 overflow-auto max-h-[440px] overscroll-contain font-mono text-xs leading-relaxed">
         {!step ? (
           <div className="text-center py-10 text-zinc-600 font-mono">
             Awaiting payload exchange.

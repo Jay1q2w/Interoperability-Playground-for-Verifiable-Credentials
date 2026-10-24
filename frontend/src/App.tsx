@@ -104,24 +104,6 @@ export const App: React.FC = () => {
         {activeTab === 'matrix' && <MatrixDashboardPage />}
         {activeTab === 'gaps' && <GapsReportPage />}
       </main>
-
-      {/* Editorial Footer */}
-      <footer className="border-t border-zinc-850 py-6 text-zinc-500 font-mono text-[11px]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div>
-            <span className="text-zinc-400 font-medium">MOSIP Decode 2026</span>
-            <span className="mx-2 text-zinc-700">•</span>
-            <span>Inji Verifiable Credentials Interoperability Playground</span>
-          </div>
-          <div className="flex items-center space-x-3 text-zinc-600 text-[10px]">
-            <span>OpenID4VCI draft 13</span>
-            <span>OpenID4VP draft 21–23</span>
-            <span>W3C VC 1.1/2.0</span>
-            <span>IETF SD-JWT VC</span>
-            <span>ISO 18013-5 mdoc</span>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };

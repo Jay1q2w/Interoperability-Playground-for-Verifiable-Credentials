@@ -19,21 +19,11 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header className="border-b border-zinc-800/80 bg-zinc-950/90 backdrop-blur-md sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        {/* Brand & System Status */}
-        <div className="flex items-center space-x-4">
-          <div className="flex items-baseline space-x-2.5">
-            <span className="font-semibold text-sm tracking-tight text-white uppercase">
-              Inji Interoperability Playground
-            </span>
-            <span className="hidden sm:inline-block font-mono text-[10px] uppercase tracking-widest px-2 py-0.5 rounded bg-[#0b1728] text-blue-200 border border-blue-900/60">
-              MOSIP / OIDC4VC
-            </span>
-          </div>
-
-          <div className="hidden md:flex items-center space-x-1.5 px-2 py-0.5 rounded-full border border-zinc-800 bg-zinc-900/60">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-            <span className="font-mono text-[10px] text-zinc-400">127.0.0.1:4000</span>
-          </div>
+        {/* Brand */}
+        <div className="flex items-center">
+          <span className="font-semibold text-sm tracking-tight text-white uppercase">
+            Inji Interoperability Playground
+          </span>
         </div>
 
         {/* Navigation Tabs (Minimalist Segmented Control) */}
