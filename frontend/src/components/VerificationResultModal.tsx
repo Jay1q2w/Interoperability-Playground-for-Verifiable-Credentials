@@ -1,20 +1,6 @@
-import React, { useEffect } from 'react';
-import confetti from 'canvas-confetti';
+import React from 'react';
 import { VerificationResult, VerificationStatus } from '../types';
-import { 
-  CheckCircle2, 
-  XCircle, 
-  AlertTriangle, 
-  ShieldCheck, 
-  ShieldAlert, 
-  Clock, 
-  Cpu, 
-  Key, 
-  Lock, 
-  Eye, 
-  EyeOff, 
-  X 
-} from 'lucide-react';
+import { Check, X, AlertTriangle } from 'lucide-react';
 
 interface VerificationResultModalProps {
   result: VerificationResult | null;
@@ -25,140 +11,74 @@ export const VerificationResultModal: React.FC<VerificationResultModalProps> = (
   result,
   onClose
 }) => {
-  useEffect(() => {
-    if (result && result.isValid) {
-      confetti({
-        particleCount: 80,
-        spread: 60,
-        origin: { y: 0.7 }
-      });
-    }
-  }, [result]);
-
   if (!result) return null;
 
-  const getStatusConfig = (status: VerificationStatus) => {
-    switch (status) {
-      case 'VALID':
-        return {
-          title: 'VERIFIED & VALID',
-          color: 'emerald',
-          icon: CheckCircle2,
-          bg: 'bg-emerald-950/40 border-emerald-500/50 text-emerald-400',
-          badge: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
-        };
-      case 'VALID_BUT_EXPIRED':
-        return {
-          title: 'VALID SIGNATURE BUT EXPIRED',
-          color: 'amber',
-          icon: AlertTriangle,
-          bg: 'bg-amber-950/40 border-amber-500/50 text-amber-400',
-          badge: 'bg-amber-500/20 text-amber-300 border-amber-500/30'
-        };
-      case 'TAMPERED_SIGNATURE':
-        return {
-          title: 'CRYPTOGRAPHIC SIGNATURE TAMPERED',
-          color: 'red',
-          icon: XCircle,
-          bg: 'bg-red-950/40 border-red-500/50 text-red-400',
-          badge: 'bg-red-500/20 text-red-300 border-red-500/30'
-        };
-      case 'INVALID_NONCE':
-        return {
-          title: 'REPLAY ATTACK / NONCE MISMATCH',
-          color: 'red',
-          icon: ShieldAlert,
-          bg: 'bg-red-950/40 border-red-500/50 text-red-400',
-          badge: 'bg-red-500/20 text-red-300 border-red-500/30'
-        };
-      case 'MISMATCHED_AUDIENCE':
-        return {
-          title: 'CROSS-SITE AUDIENCE MISMATCH',
-          color: 'red',
-          icon: ShieldAlert,
-          bg: 'bg-red-950/40 border-red-500/50 text-red-400',
-          badge: 'bg-red-500/20 text-red-300 border-red-500/30'
-        };
-      case 'REVOKED':
-        return {
-          title: 'CREDENTIAL REVOKED',
-          color: 'red',
-          icon: XCircle,
-          bg: 'bg-red-950/40 border-red-500/50 text-red-400',
-          badge: 'bg-red-500/20 text-red-300 border-red-500/30'
-        };
-      default:
-        return {
-          title: 'VERIFICATION FAILED',
-          color: 'red',
-          icon: XCircle,
-          bg: 'bg-red-950/40 border-red-500/50 text-red-400',
-          badge: 'bg-red-500/20 text-red-300 border-red-500/30'
-        };
-    }
-  };
-
-  const statusConfig = getStatusConfig(result.status);
-  const StatusIcon = statusConfig.icon;
+  const isSuccess = result.isValid;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-2xl w-full p-6 shadow-2xl relative my-8">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm overflow-y-auto">
+      <div className="bg-zinc-950 border border-zinc-750 rounded-2xl max-w-xl w-full p-6 shadow-2xl relative my-8 text-zinc-100">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
+          className="absolute top-5 right-5 p-1.5 rounded-md hover:bg-zinc-900 text-zinc-500 hover:text-zinc-200 transition-colors"
         >
-          <X className="w-5 h-5" />
+          <X className="w-4 h-4" />
         </button>
 
-        {/* Status Banner */}
-        <div className={`p-4 rounded-2xl border flex items-center space-x-3.5 mb-6 ${statusConfig.bg}`}>
-          <StatusIcon className="w-8 h-8 flex-shrink-0" />
-          <div className="flex-1">
-            <div className="flex items-center space-x-2">
-              <span className="font-bold text-base tracking-wide">{statusConfig.title}</span>
-              <span className={`text-[10px] font-mono px-2 py-0.5 rounded border font-semibold ${statusConfig.badge}`}>
-                {result.format}
-              </span>
-            </div>
-            <p className="text-xs opacity-90 mt-0.5 font-mono">
-              Evaluated by Inji Verify in {result.latencyMs}ms at {result.timestamp.substring(11, 19)} UTC
-            </p>
+        {/* Status Header */}
+        <div className="pb-4 mb-5 border-b border-zinc-800">
+          <div className="flex items-center space-x-2">
+            <span className="font-mono text-[10px] uppercase tracking-widest text-zinc-500">
+              Audit Report
+            </span>
+            <span className="font-mono text-[10px] text-zinc-600">•</span>
+            <span className="font-mono text-[10px] text-zinc-400">{result.format}</span>
           </div>
+
+          <div className="flex items-center space-x-3 mt-1.5">
+            <div
+              className={`w-5 h-5 rounded-full flex items-center justify-center ${
+                isSuccess
+                  ? 'bg-zinc-100 text-zinc-950'
+                  : 'bg-zinc-800 text-zinc-300'
+              }`}
+            >
+              {isSuccess ? <Check className="w-3.5 h-3.5 stroke-[3]" /> : <X className="w-3.5 h-3.5 stroke-[3]" />}
+            </div>
+            <h3 className="font-semibold text-lg text-white tracking-tight">
+              {result.status}
+            </h3>
+          </div>
+
+          <p className="font-mono text-xs text-zinc-400 mt-1">
+            Evaluated by Inji Verify in {result.latencyMs}ms at {result.timestamp.substring(11, 19)} UTC
+          </p>
         </div>
 
-        {/* Cryptographic Checks Breakdown */}
-        <div className="space-y-4 mb-6">
-          <h4 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center space-x-2">
-            <Lock className="w-3.5 h-3.5 text-inji-400" />
-            <span>Cryptographic Assertions & Policy Evaluation:</span>
+        {/* Cryptographic Assertions List */}
+        <div className="space-y-3 mb-5">
+          <h4 className="font-mono text-[10px] uppercase tracking-wider text-zinc-500 font-semibold">
+            Cryptographic Checks & Verification Policy
           </h4>
 
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             {result.checks.map((chk, i) => (
               <div
                 key={i}
-                className={`p-3 rounded-xl border flex items-start justify-between text-xs ${
-                  chk.passed
-                    ? 'bg-emerald-950/20 border-emerald-500/30 text-emerald-200'
-                    : 'bg-red-950/30 border-red-500/40 text-red-200'
-                }`}
+                className="p-2.5 rounded-lg border border-zinc-850 bg-zinc-900/40 flex items-start justify-between text-xs font-mono"
               >
-                <div className="flex items-start space-x-2.5">
-                  {chk.passed ? (
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  ) : (
-                    <XCircle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
-                  )}
-                  <div>
-                    <span className="font-semibold">{chk.name}</span>
-                    <p className="text-[11px] opacity-80 mt-0.5 font-mono">{chk.message}</p>
-                  </div>
+                <div>
+                  <div className="font-medium text-zinc-200">{chk.name}</div>
+                  <div className="text-[11px] text-zinc-500 mt-0.5">{chk.message}</div>
                 </div>
-                <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded ${
-                  chk.passed ? 'bg-emerald-500/20 text-emerald-300' : 'bg-red-500/20 text-red-300'
-                }`}>
+                <span
+                  className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase ${
+                    chk.passed
+                      ? 'bg-zinc-800 text-zinc-200 border border-zinc-700'
+                      : 'bg-zinc-900 text-zinc-400 border border-zinc-800'
+                  }`}
+                >
                   {chk.passed ? 'PASS' : 'FAIL'}
                 </span>
               </div>
@@ -166,33 +86,27 @@ export const VerificationResultModal: React.FC<VerificationResultModalProps> = (
           </div>
         </div>
 
-        {/* Verified Claims */}
-        <div className="mb-6">
-          <div className="flex items-center justify-between mb-2.5">
-            <h4 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center space-x-2">
-              <Eye className="w-3.5 h-3.5 text-mosip-400" />
-              <span>Verified Disclosed Subject Claims:</span>
-            </h4>
-            <div className="text-[11px] font-mono text-slate-400 flex items-center space-x-2">
-              <span className="text-emerald-400 font-semibold">{result.disclosedClaimsCount} Disclosed</span>
-              {result.hiddenClaimsCount > 0 && (
-                <span className="text-slate-500">/ {result.hiddenClaimsCount} Hidden</span>
-              )}
-            </div>
+        {/* Verified Subject Claims */}
+        <div className="mb-5">
+          <div className="flex items-center justify-between font-mono text-[10px] uppercase text-zinc-500 mb-2">
+            <span>Verified Disclosed Claims</span>
+            <span>
+              {result.disclosedClaimsCount} Disclosed / {result.hiddenClaimsCount} Hidden
+            </span>
           </div>
 
-          <div className="bg-slate-950 rounded-xl p-3 border border-slate-800 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+          <div className="bg-zinc-900/30 rounded-lg p-3 border border-zinc-850 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
             {Object.entries(result.verifiedClaims).length === 0 ? (
-              <p className="text-slate-500 text-xs italic col-span-2 text-center py-2">
+              <div className="text-zinc-500 text-xs italic col-span-2 text-center py-2 font-mono">
                 No claims verified due to security rejection.
-              </p>
+              </div>
             ) : (
               Object.entries(result.verifiedClaims).map(([key, val]) => (
-                <div key={key} className="bg-slate-900/60 p-2 rounded-lg border border-slate-800/80">
-                  <span className="text-[10px] text-slate-400 font-mono capitalize block">
+                <div key={key} className="bg-zinc-900/60 p-2 rounded border border-zinc-850">
+                  <span className="text-[9px] font-mono uppercase text-zinc-500 block">
                     {key.replace(/([A-Z])/g, ' $1')}
                   </span>
-                  <span className="font-semibold text-slate-200">
+                  <span className="font-mono text-zinc-200 text-xs block mt-0.5 truncate">
                     {Array.isArray(val) ? val.join(', ') : String(val)}
                   </span>
                 </div>
@@ -201,38 +115,38 @@ export const VerificationResultModal: React.FC<VerificationResultModalProps> = (
           </div>
         </div>
 
-        {/* Footer Audit Details */}
-        <div className="bg-slate-950/60 rounded-xl p-3 border border-slate-800 text-[11px] font-mono text-slate-400 grid grid-cols-2 sm:grid-cols-4 gap-2">
+        {/* Cryptographic Technical Details */}
+        <div className="bg-zinc-900/40 rounded-lg p-3 border border-zinc-850 grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10px] font-mono text-zinc-400">
           <div>
-            <span className="text-slate-500 block text-[9px]">ALGORITHM</span>
-            <span className="text-white font-semibold">{result.cryptographicDetails.algorithm}</span>
+            <span className="text-zinc-600 block text-[9px] uppercase">Algorithm</span>
+            <span className="text-zinc-200 font-semibold">{result.cryptographicDetails.algorithm}</span>
           </div>
           <div>
-            <span className="text-slate-500 block text-[9px]">ISSUER KEY</span>
-            <span className="text-white font-semibold truncate block max-w-[120px]">
+            <span className="text-zinc-600 block text-[9px] uppercase">Issuer Key</span>
+            <span className="text-zinc-200 truncate block max-w-[100px]">
               {result.cryptographicDetails.issuerKeyId}
             </span>
           </div>
           <div>
-            <span className="text-slate-500 block text-[9px]">HOLDER PROOF</span>
-            <span className={result.cryptographicDetails.holderBindingVerified ? 'text-emerald-400' : 'text-red-400'}>
-              {result.cryptographicDetails.holderBindingVerified ? 'Bound & Signed' : 'Not Verified'}
+            <span className="text-zinc-600 block text-[9px] uppercase">Holder Binding</span>
+            <span className={result.cryptographicDetails.holderBindingVerified ? 'text-zinc-200' : 'text-zinc-500'}>
+              {result.cryptographicDetails.holderBindingVerified ? 'Verified' : 'Unverified'}
             </span>
           </div>
           <div>
-            <span className="text-slate-500 block text-[9px]">REPLAY DEFENSE</span>
-            <span className={result.cryptographicDetails.replayProtectionVerified ? 'text-emerald-400' : 'text-red-400'}>
-              {result.cryptographicDetails.replayProtectionVerified ? 'Nonce Validated' : 'Bypassed'}
+            <span className="text-zinc-600 block text-[9px] uppercase">Replay Defense</span>
+            <span className={result.cryptographicDetails.replayProtectionVerified ? 'text-zinc-200' : 'text-zinc-500'}>
+              {result.cryptographicDetails.replayProtectionVerified ? 'Validated' : 'Failed'}
             </span>
           </div>
         </div>
 
-        <div className="mt-6 flex justify-end">
+        <div className="mt-5 flex justify-end">
           <button
             onClick={onClose}
-            className="px-5 py-2 rounded-xl bg-inji-600 hover:bg-inji-500 text-white font-semibold text-xs shadow-md shadow-inji-500/20 transition-all"
+            className="px-4 py-2 rounded-lg bg-zinc-100 hover:bg-white text-zinc-950 font-medium text-xs transition-colors"
           >
-            Dismiss
+            Close Report
           </button>
         </div>
       </div>

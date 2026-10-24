@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import mermaid from 'mermaid';
 import { ProtocolExchangeStep } from '../types';
-import { GitCommit, ArrowRight, CheckCircle2, Clock } from 'lucide-react';
+import { Check } from 'lucide-react';
 
 interface SequenceDiagramProps {
   steps: ProtocolExchangeStep[];
@@ -21,29 +21,33 @@ export const SequenceDiagram: React.FC<SequenceDiagramProps> = ({
   useEffect(() => {
     mermaid.initialize({
       startOnLoad: false,
-      theme: 'dark',
+      theme: 'base',
       themeVariables: {
         darkMode: true,
-        background: '#0f172a',
-        primaryColor: '#0284c7',
-        primaryTextColor: '#f8fafc',
-        primaryBorderColor: '#38bdf8',
-        lineColor: '#64748b',
-        secondaryColor: '#16a34a',
-        tertiaryColor: '#4f46e5'
+        background: '#09090b',
+        mainBkg: '#18181b',
+        actorBkg: '#18181b',
+        actorBorder: '#3f3f46',
+        actorTextColor: '#f4f4f5',
+        actorLineColor: '#52525b',
+        signalColor: '#a1a1aa',
+        signalTextColor: '#e4e4e7',
+        labelBoxBkgColor: '#27272a',
+        labelBoxBorderColor: '#3f3f46',
+        labelTextColor: '#f4f4f5',
+        sequenceNumberColor: '#09090b'
       },
       sequence: {
         showSequenceNumbers: true,
-        actorMargin: 50,
+        actorMargin: 40,
         boxMargin: 10,
         boxTextMargin: 5,
         noteMargin: 10,
-        messageMargin: 25
+        messageMargin: 20
       }
     });
 
     if (containerRef.current && steps.length > 0) {
-      // Build Mermaid Sequence Diagram markup
       let chart = `sequenceDiagram\n`;
       chart += `  autonumber\n`;
       chart += `  actor Issuer as Credential Issuer\n`;
@@ -67,64 +71,56 @@ export const SequenceDiagram: React.FC<SequenceDiagramProps> = ({
   }, [steps]);
 
   return (
-    <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col">
-      <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
-        <div className="flex items-center space-x-2.5">
-          <div className="w-8 h-8 rounded-lg bg-inji-500/10 text-inji-400 flex items-center justify-center border border-inji-500/20">
-            <GitCommit className="w-4 h-4" />
-          </div>
-          <div>
-            <h3 className="font-semibold text-sm text-slate-100 uppercase tracking-wider">
-              Protocol Exchange Sequence
-            </h3>
-            <p className="text-[11px] text-slate-400">
-              Interactive OpenID4VCI & OpenID4VP request-response timeline
-            </p>
-          </div>
+    <div className="border border-zinc-800 bg-zinc-950 rounded-xl p-5 flex flex-col">
+      <div className="flex items-center justify-between pb-3 mb-4 border-b border-zinc-800/80">
+        <div>
+          <h3 className="font-mono text-[11px] uppercase tracking-wider text-zinc-400 font-medium">
+            Protocol Exchange Sequence
+          </h3>
+          <p className="text-xs text-zinc-500 mt-0.5">
+            OpenID4VCI & OpenID4VP request-response timeline
+          </p>
         </div>
 
         {isRunning && (
-          <div className="flex items-center space-x-2 text-xs text-inji-400 font-mono animate-pulse">
-            <Clock className="w-3.5 h-3.5" />
-            <span>Exchanging payloads...</span>
-          </div>
+          <span className="font-mono text-[10px] text-zinc-400 flex items-center space-x-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-zinc-400 animate-pulse" />
+            <span>Exchanging Payloads</span>
+          </span>
         )}
       </div>
 
-      {/* Step Timeline Chips */}
-      <div className="flex flex-wrap gap-2 mb-4 pb-3 border-b border-slate-800/80">
+      {/* Step Selector Chips */}
+      <div className="flex flex-wrap gap-1.5 mb-4 pb-3 border-b border-zinc-850">
         {steps.map((step, idx) => {
           const isSelected = selectedStepIndex === idx;
           return (
             <button
               key={step.id}
               onClick={() => onSelectStep(idx)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-mono flex items-center space-x-1.5 transition-all border ${
+              className={`px-2.5 py-1 rounded text-[11px] font-mono flex items-center space-x-1.5 transition-all duration-150 border ${
                 isSelected
-                  ? 'bg-inji-600 text-white border-inji-400 shadow-md ring-1 ring-inji-400'
-                  : 'bg-slate-800/60 text-slate-300 border-slate-700/60 hover:bg-slate-700/60'
+                  ? 'border-zinc-300 bg-zinc-850 text-white'
+                  : 'border-zinc-800 bg-zinc-900/60 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-850'
               }`}
             >
-              <span className="w-4 h-4 rounded-full bg-slate-900 text-[10px] flex items-center justify-center font-bold">
-                {step.stepIndex}
-              </span>
-              <span className="truncate max-w-[140px]">{step.title}</span>
+              <span className="text-zinc-500">{step.stepIndex}.</span>
+              <span className="truncate max-w-[130px]">{step.title}</span>
               {step.status === 'SUCCESS' ? (
-                <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                <Check className="w-3 h-3 text-zinc-400 stroke-[2.5]" />
               ) : (
-                <span className="text-[10px] text-red-400 font-bold">!</span>
+                <span className="text-zinc-400 text-[10px] font-bold">!</span>
               )}
             </button>
           );
         })}
       </div>
 
-      {/* Mermaid Diagram Render Box */}
-      <div className="bg-slate-950/60 rounded-xl p-4 border border-slate-800/80 flex items-center justify-center min-h-[220px] overflow-x-auto">
+      {/* Mermaid Render Box */}
+      <div className="bg-zinc-900/40 rounded-lg p-4 border border-zinc-850 flex items-center justify-center min-h-[200px] overflow-x-auto">
         {steps.length === 0 ? (
-          <div className="text-center py-8 text-slate-500 text-xs">
-            <GitCommit className="w-8 h-8 mx-auto mb-2 opacity-40" />
-            <p>Click "Run Interoperability Flow" below to start the live exchange.</p>
+          <div className="text-center py-10 font-mono text-xs text-zinc-600">
+            Awaiting flow initiation. Click "Run Interoperability Flow".
           </div>
         ) : (
           <div ref={containerRef} className="w-full flex justify-center [&_svg]:max-w-full" />

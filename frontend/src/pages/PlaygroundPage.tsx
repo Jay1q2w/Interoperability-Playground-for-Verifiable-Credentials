@@ -10,8 +10,7 @@ import {
   CredentialProfileId, 
   TamperScenario, 
   ProtocolExchangeStep, 
-  VerificationResult,
-  InteropRunRecord
+  VerificationResult
 } from '../types';
 import { ThreeColumnSelector } from '../components/ThreeColumnSelector';
 import { FormatProfileSelector } from '../components/FormatProfileSelector';
@@ -21,7 +20,7 @@ import { ProtocolInspector } from '../components/ProtocolInspector';
 import { WalletCard } from '../components/WalletCard';
 import { VerificationResultModal } from '../components/VerificationResultModal';
 import { runSingleFlow, subscribeWebSocket } from '../services/api';
-import { Play, RotateCcw, AlertCircle, Sparkles, CheckCircle2 } from 'lucide-react';
+import { ArrowUpRight, AlertCircle } from 'lucide-react';
 
 interface PlaygroundPageProps {
   modules: {
@@ -72,7 +71,6 @@ export const PlaygroundPage: React.FC<PlaygroundPageProps> = ({ modules }) => {
           }
           return [...prev, newStep];
         });
-        setSelectedStepIndex((prev) => prev);
       },
       (completedRun) => {
         setIsRunning(false);
@@ -113,7 +111,6 @@ export const PlaygroundPage: React.FC<PlaygroundPageProps> = ({ modules }) => {
       setSelectedStepIndex(runRecord.steps.length - 1);
       setIsIssued(true);
 
-      // Extract deepLink and QR from steps if available
       const step4 = runRecord.steps.find((s) => s.endpoint?.includes('presentation-request'));
       if (step4?.responsePayload) {
         setDeepLink(step4.responsePayload.deepLink || '');
@@ -132,53 +129,53 @@ export const PlaygroundPage: React.FC<PlaygroundPageProps> = ({ modules }) => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-      {/* Page Title & Context */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      {/* Editorial Page Header */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-zinc-800/80">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight flex items-center space-x-2">
-            <span>Interoperability Playground Sandbox</span>
-            <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-              Live
-            </span>
+          <div className="font-mono text-[10px] uppercase tracking-widest text-zinc-500 mb-1">
+            Sandbox Environment
+          </div>
+          <h1 className="text-xl sm:text-2xl font-semibold text-white tracking-tight">
+            Interoperability Testing Workspace
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
-            Configure any combination of Issuer, Wallet, and Verifier to test end-to-end credential issuance and verification.
+          <p className="text-xs text-zinc-400 mt-1 max-w-2xl leading-relaxed">
+            Configure issuer, wallet, and verifier implementations to evaluate end-to-end credential issuance, holding, and cryptographic verification across open standards.
           </p>
         </div>
 
-        {/* Big Action CTA Button */}
-        <div className="flex items-center space-x-3">
+        {/* Primary Action Button */}
+        <div>
           <button
             onClick={handleRunFlow}
             disabled={isRunning}
-            className={`px-6 py-3 rounded-xl font-bold text-xs flex items-center space-x-2 shadow-xl transition-all ${
+            className={`px-5 py-2.5 rounded-lg font-medium text-xs flex items-center space-x-2 transition-all duration-150 active:scale-[0.98] ${
               isRunning
-                ? 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed'
-                : 'bg-gradient-to-r from-inji-600 via-blue-600 to-mosip-600 hover:from-inji-500 hover:to-mosip-500 text-white shadow-inji-500/25 active:scale-95'
+                ? 'bg-zinc-800 text-zinc-500 border border-zinc-700 cursor-not-allowed'
+                : 'bg-zinc-100 text-zinc-950 hover:bg-white border border-zinc-200 shadow-sm'
             }`}
           >
             {isRunning ? (
               <>
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                <span>Running Interoperability Exchange...</span>
+                <span className="w-3.5 h-3.5 border-2 border-zinc-600 border-t-zinc-300 rounded-full animate-spin" />
+                <span className="font-mono text-[11px]">Executing Protocol Flow...</span>
               </>
             ) : (
               <>
-                <Play className="w-4 h-4 fill-white" />
                 <span>Run Interoperability Flow</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
               </>
             )}
           </button>
         </div>
       </div>
 
-      {/* Error alert */}
+      {/* Error Alert */}
       {errorMsg && (
-        <div className="p-4 bg-red-950/40 border border-red-500/50 rounded-2xl flex items-center space-x-3 text-red-200 text-xs">
-          <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
+        <div className="p-3 bg-zinc-900 border border-zinc-800 rounded-lg flex items-center space-x-2.5 text-zinc-300 text-xs font-mono">
+          <AlertCircle className="w-4 h-4 text-amber-400 flex-shrink-0" />
           <div>
-            <span className="font-bold">Execution Error: </span>
+            <span className="font-semibold text-zinc-100">Execution Error: </span>
             <span>{errorMsg}</span>
           </div>
         </div>
@@ -216,7 +213,7 @@ export const PlaygroundPage: React.FC<PlaygroundPageProps> = ({ modules }) => {
         disabled={isRunning}
       />
 
-      {/* 4. Wallet Presentation Card (Hold & Present) */}
+      {/* 4. Wallet Presentation Card */}
       <WalletCard
         format={selectedFormat}
         profileId={selectedProfileId}
@@ -230,7 +227,7 @@ export const PlaygroundPage: React.FC<PlaygroundPageProps> = ({ modules }) => {
         isVerifying={isRunning}
       />
 
-      {/* 5. Live Sequence Diagram & Protocol Inspector Split */}
+      {/* 5. Sequence Timeline & Protocol Inspector */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <SequenceDiagram
           steps={steps}

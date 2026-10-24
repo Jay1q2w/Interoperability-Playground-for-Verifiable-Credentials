@@ -5,7 +5,7 @@ import { MatrixDashboardPage } from './pages/MatrixDashboardPage';
 import { GapsReportPage } from './pages/GapsReportPage';
 import { fetchModules, runTestSuite } from './services/api';
 import { ModuleItem, ProfileItem, TamperItem, CredentialProfileId } from './types';
-import { ShieldCheck, AlertCircle, RefreshCw } from 'lucide-react';
+import { AlertCircle, RefreshCw } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'playground' | 'matrix' | 'gaps'>('playground');
@@ -45,7 +45,6 @@ export const App: React.FC = () => {
     setSuiteProgress({ current: 0, total: 12 });
     try {
       await runTestSuite();
-      // Auto switch to matrix tab to view results!
       setActiveTab('matrix');
     } catch (err: unknown) {
       alert(`Automated Suite error: ${(err as Error).message}`);
@@ -57,30 +56,30 @@ export const App: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-slate-300">
-        <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-inji-600 to-mosip-500 flex items-center justify-center shadow-lg shadow-inji-500/20 mb-4 animate-pulse">
-          <ShieldCheck className="w-6 h-6 text-white" />
+      <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center text-zinc-400">
+        <div className="w-4 h-4 border-2 border-zinc-700 border-t-zinc-200 rounded-full animate-spin mb-3" />
+        <div className="font-mono text-xs uppercase tracking-widest text-zinc-300">
+          Inji Interop Playground
         </div>
-        <div className="font-semibold text-sm tracking-wide">Loading Inji Interoperability Playground...</div>
-        <p className="text-xs text-slate-500 font-mono mt-1">Initializing Cryptographic Keys & Protocols</p>
+        <p className="font-mono text-[10px] text-zinc-600 mt-1">
+          Loading OpenID4VC Modules & Cryptographic Suite
+        </p>
       </div>
     );
   }
 
   if (error || !modules) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4">
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 max-w-md text-center shadow-2xl">
-          <div className="w-12 h-12 rounded-2xl bg-red-500/10 text-red-400 flex items-center justify-center mx-auto mb-4 border border-red-500/20">
-            <AlertCircle className="w-6 h-6" />
-          </div>
-          <h2 className="text-base font-bold text-white mb-2">Backend Service Connection Error</h2>
-          <p className="text-xs text-slate-400 mb-6 font-mono">{error || 'Unable to load module configuration'}</p>
+      <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center p-4">
+        <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-8 max-w-sm text-center shadow-xl">
+          <AlertCircle className="w-6 h-6 text-zinc-400 mx-auto mb-3" />
+          <h2 className="text-sm font-semibold text-white mb-1">Service Connection Error</h2>
+          <p className="text-xs text-zinc-400 mb-5 font-mono">{error || 'Unable to connect to BFF backend'}</p>
           <button
             onClick={loadModules}
-            className="px-5 py-2.5 rounded-xl bg-inji-600 hover:bg-inji-500 text-white font-semibold text-xs shadow-md shadow-inji-500/20 flex items-center space-x-2 mx-auto transition-all"
+            className="px-4 py-2 rounded-md bg-zinc-100 hover:bg-white text-zinc-950 font-medium text-xs flex items-center space-x-1.5 mx-auto transition-colors"
           >
-            <RefreshCw className="w-4 h-4" />
+            <RefreshCw className="w-3.5 h-3.5" />
             <span>Retry Connection</span>
           </button>
         </div>
@@ -89,8 +88,8 @@ export const App: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
-      {/* Top Navigation & Action Header */}
+    <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col selection:bg-zinc-800 selection:text-white">
+      {/* Top Header */}
       <Header
         activeTab={activeTab}
         onTabChange={setActiveTab}
@@ -106,19 +105,19 @@ export const App: React.FC = () => {
         {activeTab === 'gaps' && <GapsReportPage />}
       </main>
 
-      {/* Footer */}
-      <footer className="bg-slate-950 border-t border-slate-850 py-6 text-center text-xs text-slate-500 font-mono">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+      {/* Editorial Footer */}
+      <footer className="border-t border-zinc-850 py-6 text-zinc-500 font-mono text-[11px]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div>
-            <span>MOSIP Decode 2026</span>
-            <span className="mx-2">•</span>
+            <span className="text-zinc-400 font-medium">MOSIP Decode 2026</span>
+            <span className="mx-2 text-zinc-700">•</span>
             <span>Inji Verifiable Credentials Interoperability Playground</span>
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3 text-zinc-600 text-[10px]">
             <span>OpenID4VCI draft 13</span>
             <span>OpenID4VP draft 21–23</span>
             <span>W3C VC 1.1/2.0</span>
-            <span>SD-JWT VC</span>
+            <span>IETF SD-JWT VC</span>
             <span>ISO 18013-5 mdoc</span>
           </div>
         </div>

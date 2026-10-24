@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, Play, Activity, Sparkles, Layers, FileText } from 'lucide-react';
+import { ArrowUpRight, Check } from 'lucide-react';
 
 interface HeaderProps {
   activeTab: 'playground' | 'matrix' | 'gaps';
@@ -17,88 +17,83 @@ export const Header: React.FC<HeaderProps> = ({
   suiteProgress
 }) => {
   return (
-    <header className="bg-slate-900 border-b border-slate-800 sticky top-0 z-40 backdrop-blur-md bg-opacity-90">
+    <header className="border-b border-zinc-800/80 bg-zinc-950/90 backdrop-blur-md sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        {/* Brand & Title */}
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-inji-600 to-mosip-500 flex items-center justify-center shadow-lg shadow-inji-500/20">
-            <ShieldCheck className="w-6 h-6 text-white" />
+        {/* Brand & System Status */}
+        <div className="flex items-center space-x-4">
+          <div className="flex items-baseline space-x-2.5">
+            <span className="font-semibold text-sm tracking-tight text-white uppercase">
+              Inji Interoperability Playground
+            </span>
+            <span className="hidden sm:inline-block font-mono text-[10px] uppercase tracking-widest text-zinc-500">
+              MOSIP / OIDC4VC
+            </span>
           </div>
-          <div>
-            <div className="flex items-center space-x-2">
-              <span className="font-bold text-lg text-white tracking-tight">Inji Interop Playground</span>
-              <span className="px-2 py-0.5 text-xs font-semibold rounded bg-inji-500/20 text-inji-400 border border-inji-500/30">
-                MOSIP Stack
-              </span>
-              <span className="px-2 py-0.5 text-xs font-semibold rounded bg-mosip-500/20 text-mosip-400 border border-mosip-500/30">
-                OpenID4VCI & VP
-              </span>
-            </div>
-            <p className="text-xs text-slate-400">Verifiable Credentials Cross-Ecosystem Test Sandbox</p>
+
+          <div className="hidden md:flex items-center space-x-1.5 px-2 py-0.5 rounded-full border border-zinc-800 bg-zinc-900/60">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+            <span className="font-mono text-[10px] text-zinc-400">127.0.0.1:4000</span>
           </div>
         </div>
 
-        {/* Navigation Tabs */}
-        <nav className="flex items-center space-x-1 bg-slate-800/80 p-1 rounded-lg border border-slate-700/60">
+        {/* Navigation Tabs (Minimalist Segmented Control) */}
+        <nav className="flex items-center p-0.5 rounded-lg border border-zinc-800 bg-zinc-900/40">
           <button
             onClick={() => onTabChange('playground')}
-            className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center space-x-1.5 ${
+            className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-150 ${
               activeTab === 'playground'
-                ? 'bg-inji-600 text-white shadow-sm'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-700/50'
+                ? 'bg-zinc-800 text-white shadow-sm'
+                : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
-            <Activity className="w-3.5 h-3.5" />
-            <span>Interactive Playground</span>
+            Playground
           </button>
 
           <button
             onClick={() => onTabChange('matrix')}
-            className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center space-x-1.5 ${
+            className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-150 ${
               activeTab === 'matrix'
-                ? 'bg-inji-600 text-white shadow-sm'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-700/50'
+                ? 'bg-zinc-800 text-white shadow-sm'
+                : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
-            <Layers className="w-3.5 h-3.5" />
-            <span>Interop Matrix & Runs</span>
+            Matrix & Telemetry
           </button>
 
           <button
             onClick={() => onTabChange('gaps')}
-            className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center space-x-1.5 ${
+            className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-150 ${
               activeTab === 'gaps'
-                ? 'bg-inji-600 text-white shadow-sm'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-700/50'
+                ? 'bg-zinc-800 text-white shadow-sm'
+                : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
-            <FileText className="w-3.5 h-3.5" />
-            <span>Interoperability Gaps</span>
+            Interoperability Gaps
           </button>
         </nav>
 
-        {/* Action Button: Automated Matrix CI Suite */}
-        <div className="flex items-center space-x-3">
+        {/* Action Button (Solid Monochrome Matte) */}
+        <div className="flex items-center space-x-2">
           <button
             onClick={onRunSuite}
             disabled={isRunningSuite}
-            className={`px-4 py-2 rounded-lg text-xs font-semibold flex items-center space-x-2 transition-all shadow-md ${
+            className={`px-3.5 py-1.5 rounded-md text-xs font-medium transition-all duration-150 flex items-center space-x-1.5 active:scale-[0.98] ${
               isRunningSuite
-                ? 'bg-slate-800 text-slate-400 cursor-not-allowed border border-slate-700'
-                : 'bg-gradient-to-r from-mosip-600 to-inji-600 hover:from-mosip-500 hover:to-inji-500 text-white shadow-mosip-500/20 active:scale-95'
+                ? 'bg-zinc-800 text-zinc-500 border border-zinc-700 cursor-not-allowed'
+                : 'bg-zinc-100 text-zinc-950 hover:bg-white border border-zinc-200 shadow-sm'
             }`}
           >
             {isRunningSuite ? (
               <>
-                <div className="w-3.5 h-3.5 border-2 border-mosip-400 border-t-transparent rounded-full animate-spin" />
-                <span>
-                  Testing {suiteProgress ? `${suiteProgress.current}/${suiteProgress.total}` : 'Matrix...'}
+                <span className="w-3 h-3 border-2 border-zinc-600 border-t-zinc-300 rounded-full animate-spin" />
+                <span className="font-mono text-[11px]">
+                  {suiteProgress ? `Running ${suiteProgress.current}/${suiteProgress.total}` : 'Executing Suite...'}
                 </span>
               </>
             ) : (
               <>
-                <Sparkles className="w-3.5 h-3.5 text-yellow-300" />
-                <span>Run 12-Test Matrix Suite</span>
+                <span>Run Matrix Test Suite</span>
+                <ArrowUpRight className="w-3 h-3" />
               </>
             )}
           </button>
