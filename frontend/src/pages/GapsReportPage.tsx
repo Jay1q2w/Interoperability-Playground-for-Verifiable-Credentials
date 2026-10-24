@@ -131,7 +131,7 @@ Update DIF PEX constraint engine to normalize claim roots or automatically evalu
             {/* Top row */}
             <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 pb-3 mb-3 border-b border-zinc-850">
               <div className="flex items-center space-x-2.5">
-                <span className="font-mono text-xs text-zinc-400 font-semibold">{gap.id}</span>
+                <span className="font-mono text-xs text-blue-200 bg-[#0d1e38] px-2 py-0.5 rounded border border-blue-900/60 font-semibold">{gap.id}</span>
                 <span className="text-zinc-600 font-mono">•</span>
                 <h3 className="font-medium text-sm text-zinc-100">{gap.title}</h3>
               </div>
@@ -178,16 +178,20 @@ Update DIF PEX constraint engine to normalize claim roots or automatically evalu
 
                 <button
                   onClick={() => handleCopy(gap.id, gap.githubTemplate)}
-                  className="px-2.5 py-1 rounded bg-zinc-850 hover:bg-zinc-800 text-zinc-300 hover:text-white text-[11px] font-mono flex items-center space-x-1 transition-colors border border-zinc-750"
+                  className={`px-2.5 py-1 rounded text-[11px] font-mono flex items-center space-x-1.5 transition-colors border ${
+                    copiedId === gap.id
+                      ? 'bg-blue-600 text-white border-blue-500'
+                      : 'bg-[#0d1e38] hover:bg-[#12284c] text-blue-200 border-blue-900/70'
+                  }`}
                 >
                   {copiedId === gap.id ? (
                     <>
-                      <Check className="w-3 h-3 text-zinc-200" />
+                      <Check className="w-3 h-3 text-white" />
                       <span>Copied</span>
                     </>
                   ) : (
                     <>
-                      <Copy className="w-3 h-3" />
+                      <Copy className="w-3 h-3 text-blue-300" />
                       <span>Copy Template</span>
                     </>
                   )}

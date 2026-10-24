@@ -61,16 +61,20 @@ export const FormatProfileSelector: React.FC<FormatProfileSelectorProps> = ({
                   onClick={() => !disabled && onSelectFormat(fmt.id)}
                   className={`p-3 rounded-lg border transition-all duration-150 cursor-pointer ${
                     isSelected
-                      ? 'border-zinc-300 bg-zinc-900/90 text-white'
+                      ? 'border-blue-700/80 bg-[#0a1628]/80 text-white shadow-sm'
                       : 'border-zinc-850 bg-zinc-900/30 hover:border-zinc-750 text-zinc-400 hover:text-zinc-200'
                   } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   <div className="flex items-start justify-between">
-                    <span className="font-medium text-xs text-zinc-100">{fmt.name}</span>
-                    {isSelected && <Check className="w-3.5 h-3.5 text-zinc-200 stroke-[2.5]" />}
+                    <span className="font-medium text-xs text-white">{fmt.name}</span>
+                    {isSelected && <Check className="w-3.5 h-3.5 text-blue-300 stroke-[2.5]" />}
                   </div>
-                  <p className="text-[10px] text-zinc-500 font-mono mt-1">{fmt.standard}</p>
-                  <div className="mt-2 text-[9px] font-mono text-zinc-400 px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-800 inline-block">
+                  <p className="text-[10px] text-zinc-400 font-mono mt-1">{fmt.standard}</p>
+                  <div className={`mt-2 text-[9px] font-mono px-1.5 py-0.5 rounded inline-block ${
+                    isSelected
+                      ? 'bg-[#0d1e38] text-blue-200 border border-blue-900/70'
+                      : 'bg-zinc-900 text-zinc-400 border border-zinc-800'
+                  }`}>
                     {fmt.badge}
                   </div>
                 </div>
@@ -97,18 +101,18 @@ export const FormatProfileSelector: React.FC<FormatProfileSelectorProps> = ({
                   onClick={() => !disabled && onSelectProfile(id as CredentialProfileId)}
                   className={`p-3 rounded-lg border transition-all duration-150 cursor-pointer ${
                     isSelected
-                      ? 'border-zinc-300 bg-zinc-900/90 text-white'
+                      ? 'border-blue-700/80 bg-[#0a1628]/80 text-white shadow-sm'
                       : 'border-zinc-850 bg-zinc-900/30 hover:border-zinc-750 text-zinc-400 hover:text-zinc-200'
                   } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   <div className="flex items-start justify-between">
-                    <span className="font-medium text-xs text-zinc-100">{prof.name}</span>
-                    {isSelected && <Check className="w-3.5 h-3.5 text-zinc-200 stroke-[2.5]" />}
+                    <span className="font-medium text-xs text-white">{prof.name}</span>
+                    {isSelected && <Check className="w-3.5 h-3.5 text-blue-300 stroke-[2.5]" />}
                   </div>
-                  <p className="text-[10px] text-zinc-500 mt-1 line-clamp-2 leading-relaxed">
+                  <p className="text-[10px] text-zinc-400 mt-1 line-clamp-2 leading-relaxed">
                     {prof.description}
                   </p>
-                  <div className="mt-2 text-[9px] font-mono text-zinc-400">
+                  <div className={`mt-2 text-[9px] font-mono ${isSelected ? 'text-blue-300' : 'text-zinc-500'}`}>
                     {Object.keys(prof.claims).length} claims defined
                   </div>
                 </div>

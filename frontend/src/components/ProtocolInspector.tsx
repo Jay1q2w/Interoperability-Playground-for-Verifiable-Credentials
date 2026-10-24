@@ -125,7 +125,7 @@ export const ProtocolInspector: React.FC<ProtocolInspectorProps> = ({
             <button
               onClick={() => setActiveTab('response')}
               className={`px-2.5 py-1 rounded-md text-[11px] font-mono transition-all duration-150 ${
-                activeTab === 'response' ? 'bg-zinc-800 text-white' : 'text-zinc-400 hover:text-zinc-200'
+                activeTab === 'response' ? 'bg-[#0e2448] text-white border border-blue-900/80 shadow-sm' : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
               Response
@@ -133,7 +133,7 @@ export const ProtocolInspector: React.FC<ProtocolInspectorProps> = ({
             <button
               onClick={() => setActiveTab('request')}
               className={`px-2.5 py-1 rounded-md text-[11px] font-mono transition-all duration-150 ${
-                activeTab === 'request' ? 'bg-zinc-800 text-white' : 'text-zinc-400 hover:text-zinc-200'
+                activeTab === 'request' ? 'bg-[#0e2448] text-white border border-blue-900/80 shadow-sm' : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
               Request
@@ -142,7 +142,7 @@ export const ProtocolInspector: React.FC<ProtocolInspectorProps> = ({
               <button
                 onClick={() => setActiveTab('decoded')}
                 className={`px-2.5 py-1 rounded-md text-[11px] font-mono transition-all duration-150 ${
-                  activeTab === 'decoded' ? 'bg-zinc-800 text-white' : 'text-zinc-400 hover:text-zinc-200'
+                  activeTab === 'decoded' ? 'bg-[#0e2448] text-white border border-blue-900/80 shadow-sm' : 'text-zinc-400 hover:text-zinc-200'
                 }`}
               >
                 Decoded

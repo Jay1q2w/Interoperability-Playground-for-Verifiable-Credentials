@@ -100,7 +100,7 @@ export const SequenceDiagram: React.FC<SequenceDiagramProps> = ({
               onClick={() => onSelectStep(idx)}
               className={`px-2.5 py-1 rounded text-[11px] font-mono flex items-center space-x-1.5 transition-all duration-150 border ${
                 isSelected
-                  ? 'border-zinc-300 bg-zinc-850 text-white'
+                  ? 'border-blue-700/80 bg-[#0d1e38] text-white shadow-sm'
                   : 'border-zinc-800 bg-zinc-900/60 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-850'
               }`}
             >

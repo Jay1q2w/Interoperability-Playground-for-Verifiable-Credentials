@@ -96,14 +96,14 @@ export const MatrixDashboardPage: React.FC = () => {
       {/* Metrics Grid */}
       {stats && (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-          <div className="border border-zinc-800 bg-zinc-950 rounded-xl p-4">
-            <span className="font-mono text-[10px] uppercase text-zinc-500 tracking-wider block">
+          <div className="border border-blue-900/60 bg-[#0a1628]/70 rounded-xl p-4 shadow-sm">
+            <span className="font-mono text-[10px] uppercase text-blue-300/80 tracking-wider block">
               Total Executed Runs
             </span>
             <div className="text-2xl font-semibold text-white tracking-tight mt-1 font-mono">
               {stats.total}
             </div>
-            <span className="font-mono text-[10px] text-zinc-500 mt-1 block">All modules & formats</span>
+            <span className="font-mono text-[10px] text-zinc-400 mt-1 block">All modules & formats</span>
           </div>
 
           <div className="border border-zinc-800 bg-zinc-950 rounded-xl p-4">
@@ -173,7 +173,7 @@ export const MatrixDashboardPage: React.FC = () => {
                     <td className="py-2.5 px-3 text-zinc-400">{cell.walletId}</td>
                     <td className="py-2.5 px-3 text-zinc-400">{cell.verifierId}</td>
                     <td className="py-2.5 px-3">
-                      <span className="px-1.5 py-0.5 rounded bg-zinc-900 text-zinc-400 border border-zinc-800 text-[10px]">
+                      <span className="px-1.5 py-0.5 rounded bg-[#0d1e38] text-blue-200 border border-blue-900/60 text-[10px]">
                         {cell.format}
                       </span>
                     </td>

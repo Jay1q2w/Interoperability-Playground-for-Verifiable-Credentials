@@ -47,13 +47,13 @@ export const WalletCard: React.FC<WalletCardProps> = ({
         </div>
 
         {/* Editorial Security Document Card */}
-        <div className="border border-zinc-700 bg-zinc-900/60 rounded-xl p-5 mb-5 relative">
-          <div className="flex items-start justify-between pb-3 mb-4 border-b border-zinc-800">
+        <div className="border border-blue-900/60 bg-[#0a1628] rounded-xl p-5 mb-5 relative shadow-sm">
+          <div className="flex items-start justify-between pb-3 mb-4 border-b border-blue-900/50">
             <div>
-              <span className="font-mono text-[9px] uppercase tracking-widest text-zinc-500 block">
+              <span className="font-mono text-[9px] uppercase tracking-widest text-blue-300/80 block">
                 Official Credential Document
               </span>
-              <h4 className="font-semibold text-sm text-zinc-100 tracking-tight mt-0.5">
+              <h4 className="font-semibold text-sm text-white tracking-tight mt-0.5">
                 {profileId === 'MOSIP_NATIONAL_ID'
                   ? 'MOSIP National Identity Card'
                   : profileId === 'DIGITAL_DRIVING_LICENSE'
@@ -62,14 +62,14 @@ export const WalletCard: React.FC<WalletCardProps> = ({
               </h4>
             </div>
 
-            <span className="font-mono text-[10px] text-zinc-300 bg-zinc-800 px-2 py-0.5 rounded border border-zinc-700">
+            <span className="font-mono text-[10px] text-blue-200 bg-[#0e2448] px-2 py-0.5 rounded border border-blue-800">
               {format}
             </span>
           </div>
 
           {/* Claims Grid with Minimalist Toggles */}
           <div className="space-y-2">
-            <div className="flex items-center justify-between text-[10px] font-mono uppercase text-zinc-500 mb-1">
+            <div className="flex items-center justify-between text-[10px] font-mono uppercase text-blue-300/70 mb-1">
               <span>Identity Attributes</span>
               {isSelectiveFormat && <span>Click to toggle disclosure</span>}
             </div>
@@ -86,12 +86,12 @@ export const WalletCard: React.FC<WalletCardProps> = ({
                       isSelectiveFormat ? 'cursor-pointer select-none' : ''
                     } ${
                       isDisclosed
-                        ? 'border-zinc-700 bg-zinc-850/80 text-zinc-200'
-                        : 'border-zinc-850 bg-zinc-950/40 text-zinc-600 opacity-50'
+                        ? 'border-blue-800/70 bg-[#0e2448]/60 text-white'
+                        : 'border-zinc-850/80 bg-zinc-950/60 text-zinc-500 opacity-50'
                     }`}
                   >
                     <div>
-                      <div className="font-mono text-[9px] text-zinc-500 uppercase tracking-wider">
+                      <div className="font-mono text-[9px] text-blue-300/70 uppercase tracking-wider">
                         {key.replace(/([A-Z])/g, ' $1')}
                       </div>
                       <div className="font-mono text-xs text-zinc-100 mt-0.5 truncate max-w-[170px]">
@@ -102,11 +102,11 @@ export const WalletCard: React.FC<WalletCardProps> = ({
                     {isSelectiveFormat && (
                       <div className="ml-2 flex-shrink-0">
                         {isDisclosed ? (
-                          <div className="w-4 h-4 rounded bg-zinc-200 text-zinc-950 flex items-center justify-center">
+                          <div className="w-4 h-4 rounded bg-blue-600 text-white flex items-center justify-center">
                             <Check className="w-3 h-3 stroke-[3]" />
                           </div>
                         ) : (
-                          <div className="w-4 h-4 rounded border border-zinc-700" />
+                          <div className="w-4 h-4 rounded border border-blue-900/60" />
                         )}
                       </div>
                     )}
@@ -143,13 +143,13 @@ export const WalletCard: React.FC<WalletCardProps> = ({
               className={`w-full py-2.5 px-4 rounded-lg font-medium text-xs flex items-center justify-center space-x-2 transition-all duration-150 active:scale-[0.99] ${
                 isVerifying
                   ? 'bg-zinc-800 text-zinc-500 border border-zinc-700 cursor-not-allowed'
-                  : 'bg-zinc-100 text-zinc-950 hover:bg-white border border-zinc-200 shadow-sm'
+                  : 'bg-[#0e2448] hover:bg-[#122e5c] text-white border border-blue-800 shadow-sm'
               }`}
             >
               {isVerifying ? (
                 <>
-                  <span className="w-3.5 h-3.5 border-2 border-zinc-600 border-t-zinc-300 rounded-full animate-spin" />
-                  <span>Evaluating Presentation Proofs...</span>
+                  <span className="w-3.5 h-3.5 border-2 border-blue-400 border-t-white rounded-full animate-spin" />
+                  <span className="text-blue-100">Evaluating Presentation Proofs...</span>
                 </>
               ) : (
                 <span>Submit Presentation (direct_post)</span>

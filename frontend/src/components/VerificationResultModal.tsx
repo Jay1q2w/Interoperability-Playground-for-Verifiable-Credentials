@@ -33,14 +33,14 @@ export const VerificationResultModal: React.FC<VerificationResultModalProps> = (
               Audit Report
             </span>
             <span className="font-mono text-[10px] text-zinc-600">•</span>
-            <span className="font-mono text-[10px] text-zinc-400">{result.format}</span>
+            <span className="font-mono text-[10px] text-blue-200 bg-[#0e2448] px-2 py-0.5 rounded border border-blue-900/70">{result.format}</span>
           </div>
 
-          <div className="flex items-center space-x-3 mt-1.5">
+          <div className="flex items-center space-x-3 mt-2">
             <div
-              className={`w-5 h-5 rounded-full flex items-center justify-center ${
+              className={`w-6 h-6 rounded-full flex items-center justify-center ${
                 isSuccess
-                  ? 'bg-zinc-100 text-zinc-950'
+                  ? 'bg-blue-600 text-white'
                   : 'bg-zinc-800 text-zinc-300'
               }`}
             >
@@ -144,7 +144,7 @@ export const VerificationResultModal: React.FC<VerificationResultModalProps> = (
         <div className="mt-5 flex justify-end">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg bg-zinc-100 hover:bg-white text-zinc-950 font-medium text-xs transition-colors"
+            className="px-4 py-2 rounded-lg bg-[#0e2448] hover:bg-[#122e5c] text-white border border-blue-800 font-medium text-xs transition-colors shadow-sm"
           >
             Close Report
           </button>

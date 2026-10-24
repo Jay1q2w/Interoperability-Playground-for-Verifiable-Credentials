@@ -38,7 +38,7 @@ export const ThreeColumnSelector: React.FC<ThreeColumnSelectorProps> = ({
             </h3>
             <p className="text-xs text-zinc-500 mt-0.5">OpenID4VCI draft 13 Endpoint</p>
           </div>
-          <span className="font-mono text-[10px] text-zinc-400 bg-zinc-900 px-2 py-0.5 rounded border border-zinc-800">
+          <span className="font-mono text-[10px] text-blue-200 bg-[#0d1e38] px-2 py-0.5 rounded border border-blue-900/70">
             ISSUANCE
           </span>
         </div>
@@ -52,15 +52,15 @@ export const ThreeColumnSelector: React.FC<ThreeColumnSelectorProps> = ({
                 onClick={() => !disabled && onSelectIssuer(item.id as IssuerId)}
                 className={`p-3 rounded-lg border transition-all duration-150 cursor-pointer ${
                   isSelected
-                    ? 'border-zinc-300 bg-zinc-900/90 text-white'
+                    ? 'border-blue-700/80 bg-[#0a1628]/80 text-white shadow-sm'
                     : 'border-zinc-850 bg-zinc-900/30 hover:border-zinc-750 text-zinc-300'
                 } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex items-center space-x-2">
-                    <span className="font-medium text-xs text-zinc-100">{item.name}</span>
+                    <span className="font-medium text-xs text-white">{item.name}</span>
                     {item.type === 'inji' && (
-                      <span className="text-[9px] font-mono uppercase bg-zinc-800 text-zinc-300 px-1.5 py-0.2 rounded border border-zinc-700">
+                      <span className="text-[9px] font-mono uppercase bg-[#0e2448] text-blue-200 px-1.5 py-0.2 rounded border border-blue-900/70">
                         Inji Core
                       </span>
                     )}
@@ -71,7 +71,7 @@ export const ThreeColumnSelector: React.FC<ThreeColumnSelectorProps> = ({
                     )}
                   </div>
                   {isSelected ? (
-                    <div className="w-4 h-4 rounded-full bg-zinc-100 text-zinc-950 flex items-center justify-center flex-shrink-0">
+                    <div className="w-4 h-4 rounded-full bg-blue-600 text-white flex items-center justify-center flex-shrink-0">
                       <Check className="w-3 h-3 stroke-[3]" />
                     </div>
                   ) : (
@@ -104,7 +104,7 @@ export const ThreeColumnSelector: React.FC<ThreeColumnSelectorProps> = ({
             </h3>
             <p className="text-xs text-zinc-500 mt-0.5">Keystore, Signer & Presentation</p>
           </div>
-          <span className="font-mono text-[10px] text-zinc-400 bg-zinc-900 px-2 py-0.5 rounded border border-zinc-800">
+          <span className="font-mono text-[10px] text-blue-200 bg-[#0d1e38] px-2 py-0.5 rounded border border-blue-900/70">
             HOLDER
           </span>
         </div>
@@ -118,21 +118,21 @@ export const ThreeColumnSelector: React.FC<ThreeColumnSelectorProps> = ({
                 onClick={() => !disabled && onSelectWallet(item.id as WalletId)}
                 className={`p-3 rounded-lg border transition-all duration-150 cursor-pointer ${
                   isSelected
-                    ? 'border-zinc-300 bg-zinc-900/90 text-white'
+                    ? 'border-blue-700/80 bg-[#0a1628]/80 text-white shadow-sm'
                     : 'border-zinc-850 bg-zinc-900/30 hover:border-zinc-750 text-zinc-300'
                 } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex items-center space-x-2">
-                    <span className="font-medium text-xs text-zinc-100">{item.name}</span>
+                    <span className="font-medium text-xs text-white">{item.name}</span>
                     {item.type === 'inji' && (
-                      <span className="text-[9px] font-mono uppercase bg-zinc-800 text-zinc-300 px-1.5 py-0.2 rounded border border-zinc-700">
+                      <span className="text-[9px] font-mono uppercase bg-[#0e2448] text-blue-200 px-1.5 py-0.2 rounded border border-blue-900/70">
                         Inji Core
                       </span>
                     )}
                   </div>
                   {isSelected ? (
-                    <div className="w-4 h-4 rounded-full bg-zinc-100 text-zinc-950 flex items-center justify-center flex-shrink-0">
+                    <div className="w-4 h-4 rounded-full bg-blue-600 text-white flex items-center justify-center flex-shrink-0">
                       <Check className="w-3 h-3 stroke-[3]" />
                     </div>
                   ) : (
@@ -165,7 +165,7 @@ export const ThreeColumnSelector: React.FC<ThreeColumnSelectorProps> = ({
             </h3>
             <p className="text-xs text-zinc-500 mt-0.5">OpenID4VP draft 21-23 Verifier</p>
           </div>
-          <span className="font-mono text-[10px] text-zinc-400 bg-zinc-900 px-2 py-0.5 rounded border border-zinc-800">
+          <span className="font-mono text-[10px] text-blue-200 bg-[#0d1e38] px-2 py-0.5 rounded border border-blue-900/70">
             VERIFICATION
           </span>
         </div>
@@ -179,15 +179,15 @@ export const ThreeColumnSelector: React.FC<ThreeColumnSelectorProps> = ({
                 onClick={() => !disabled && onSelectVerifier(item.id as VerifierId)}
                 className={`p-3 rounded-lg border transition-all duration-150 cursor-pointer ${
                   isSelected
-                    ? 'border-zinc-300 bg-zinc-900/90 text-white'
+                    ? 'border-blue-700/80 bg-[#0a1628]/80 text-white shadow-sm'
                     : 'border-zinc-850 bg-zinc-900/30 hover:border-zinc-750 text-zinc-300'
                 } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex items-center space-x-2">
-                    <span className="font-medium text-xs text-zinc-100">{item.name}</span>
+                    <span className="font-medium text-xs text-white">{item.name}</span>
                     {item.type === 'inji' && (
-                      <span className="text-[9px] font-mono uppercase bg-zinc-800 text-zinc-300 px-1.5 py-0.2 rounded border border-zinc-700">
+                      <span className="text-[9px] font-mono uppercase bg-[#0e2448] text-blue-200 px-1.5 py-0.2 rounded border border-blue-900/70">
                         Inji Core
                       </span>
                     )}
@@ -198,7 +198,7 @@ export const ThreeColumnSelector: React.FC<ThreeColumnSelectorProps> = ({
                     )}
                   </div>
                   {isSelected ? (
-                    <div className="w-4 h-4 rounded-full bg-zinc-100 text-zinc-950 flex items-center justify-center flex-shrink-0">
+                    <div className="w-4 h-4 rounded-full bg-blue-600 text-white flex items-center justify-center flex-shrink-0">
                       <Check className="w-3 h-3 stroke-[3]" />
                     </div>
                   ) : (
