@@ -53,6 +53,18 @@ async function bootstrap() {
     console.log(`  - Inji Wallet Holder: ${keys.injiWalletHolder.did} (${keys.injiWalletHolder.alg})`);
     console.log(`  - Inji Verifier: ${keys.injiVerifier.did} (${keys.injiVerifier.alg})`);
 
+    server.on('error', (err: any) => {
+      if (err.code === 'EADDRINUSE') {
+        console.error(`\n[ERROR] Port ${PORT} is already in use by another running process.`);
+        console.error(`To resolve this on Windows, run:`);
+        console.error(`  Stop-Process -Id (Get-NetTCPConnection -LocalPort ${PORT}).OwningProcess -Force`);
+        console.error(`Or set a different port with: PORT=4001 npm start\n`);
+      } else {
+        console.error('[ERROR] Server listener error:', err);
+      }
+      process.exit(1);
+    });
+
     server.listen(PORT, () => {
       console.log(`=======================================================`);
       console.log(`🚀 Inji Interoperability Playground Backend running on:`);

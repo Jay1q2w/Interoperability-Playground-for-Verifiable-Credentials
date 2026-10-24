@@ -7,6 +7,7 @@
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
+    "clean:port": "powershell -Command \"Get-NetTCPConnection -LocalPort 4000 -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force }\"",
     "test": "jest --config jest.config.cjs --runInBand --detectOpenHandles"
   },
   "dependencies": {
