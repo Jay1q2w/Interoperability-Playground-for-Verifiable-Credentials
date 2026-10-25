@@ -10,7 +10,8 @@ import {
   CredentialFormat,
   CredentialProfileId,
   TamperScenario,
-  ProtocolExchangeStep
+  ProtocolExchangeStep,
+  VerificationResult
 } from '../types';
 
 const API_BASE = '/api';
@@ -35,6 +36,7 @@ export async function runSingleFlow(params: {
   profileId: CredentialProfileId;
   tamperScenario: TamperScenario;
   selectedClaims?: string[];
+  customClaims?: Record<string, unknown>;
 }): Promise<InteropRunRecord> {
   const res = await fetch(`${API_BASE}/interop/run`, {
     method: 'POST',
@@ -44,6 +46,19 @@ export async function runSingleFlow(params: {
   if (!res.ok) {
     const errorJson = await res.json().catch(() => ({}));
     throw new Error(errorJson.error || 'Failed to execute interop run');
+  }
+  return res.json();
+}
+
+export async function verifyRawCredential(rawCredential: string | object, format?: string): Promise<VerificationResult> {
+  const res = await fetch(`${API_BASE}/verifier/verify-raw`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ rawCredential, format })
+  });
+  if (!res.ok) {
+    const errorJson = await res.json().catch(() => ({}));
+    throw new Error(errorJson.error || 'Failed to verify external credential');
   }
   return res.json();
 }

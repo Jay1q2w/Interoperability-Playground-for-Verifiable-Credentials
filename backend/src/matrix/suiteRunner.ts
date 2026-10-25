@@ -14,7 +14,7 @@ import {
 import { ISSUER_MODULES, SAMPLE_PROFILES } from '../modules/issuers.js';
 import { WALLET_MODULES } from '../modules/wallets.js';
 import { VERIFIER_MODULES } from '../modules/verifiers.js';
-import { getKeys } from '../crypto/keys.js';
+import { getKeys, initKeyInfrastructure } from '../crypto/keys.js';
 import { createCredentialOffer, exchangeToken, processCredentialRequest } from '../protocols/openid4vci.js';
 import { createPresentationRequest, verifyPresentation } from '../protocols/openid4vp.js';
 import { createW3CPresentation, W3CVerifiableCredential } from '../crypto/w3c.js';
@@ -32,10 +32,18 @@ export interface ExecuteRunOptions {
   profileId: CredentialProfileId;
   tamperScenario?: TamperScenario;
   selectedClaims?: string[];
+  customClaims?: Record<string, unknown>;
   broadcastStep?: (step: ProtocolExchangeStep) => void;
 }
 
 export async function executeInteroperabilityRun(options: ExecuteRunOptions): Promise<InteropRunRecord> {
+  // Auto-initialize key infrastructure if not yet bootstrapped
+  try {
+    getKeys();
+  } catch (_) {
+    await initKeyInfrastructure();
+  }
+
   const startTime = Date.now();
   const runId = `run_${crypto.randomUUID()}`;
   const tamper = options.tamperScenario || 'NONE';
@@ -89,11 +97,15 @@ export async function executeInteroperabilityRun(options: ExecuteRunOptions): Pr
     // Step 1: Issuer Metadata Discovery & Credential Offer Generation
     // -------------------------------------------------------------
     const s1Start = Date.now();
+    const claimsToUse = (options.customClaims && Object.keys(options.customClaims).length > 0)
+      ? options.customClaims
+      : profile.claims;
+
     const { offer, preAuthorizedCode, offerUri } = createCredentialOffer(
       baseUrl,
       options.format,
       options.profileId,
-      profile.claims
+      claimsToUse
     );
     recordStep(
       'Issue Credential Offer (OpenID4VCI)',
@@ -216,7 +228,7 @@ export async function executeInteroperabilityRun(options: ExecuteRunOptions): Pr
     // -------------------------------------------------------------
     const s5Start = Date.now();
     let rawVpToken: unknown;
-    const presentedClaimKeys = options.selectedClaims || Object.keys(profile.claims);
+    const presentedClaimKeys = options.selectedClaims || Object.keys(claimsToUse);
 
     if (options.format === 'ldp_vc') {
       const vc = credentialResponse.credential as W3CVerifiableCredential;

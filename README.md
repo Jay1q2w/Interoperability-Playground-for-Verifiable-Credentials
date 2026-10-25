@@ -17,6 +17,8 @@ $$\text{Issuer (Inji Certify / External)} \xrightarrow{\text{OpenID4VCI}} \text{
   1. `ldp_vc`: **W3C VC 1.1 / 2.0 (JSON-LD)** with canonical JSON (RFC 8785) & Ed25519 / RSA detached JWS signatures.
   2. `vc+sd-jwt`: **IETF SD-JWT VC** (draft-ietf-oauth-sd-jwt-vc) with cryptographic salt generation, SHA-256 disclosure hashes, and Holder Key Binding JWT (KB-JWT).
   3. `mso_mdoc`: **ISO/IEC 18013-5 Mobile Driving License** with CBOR encoding, MobileSecurityObject (MSO) valueDigests tree, and DeviceSigned SessionTranscript authentication.
+- **Custom Subject Identity Claims Editor:** Customize, edit, and append custom subject identity attributes (names, IDs, custom attributes) prior to issuance; Inji Certify signs your exact data and Inji Verify proves it.
+- **Direct External Credential Verification Engine (Upload & Paste):** Drag-and-drop or paste third-party `.json` (W3C VC/VP) or `.jwt` (SD-JWT) credentials directly into Inji Verify to test external ecosystem compatibility.
 - **Live Visual Protocol Inspector:** Inspect raw HTTP requests, query params, headers, JSON payloads, and token decoding (JWS header/payload, SD-JWT disclosures, mDoc fields).
 - **Interactive Animated Sequence Diagram:** Mermaid-powered live sequence showing message exchanges between Issuer, Wallet, Verifier, and Cryptographic Libraries.
 - **Replay & Tamper Mode:** Deliberately corrupt payloads (corrupt signature, MITM claim modification, expired validity, replayed nonce, cross-site audience mismatch, revoked status) to evaluate Inji Verify's security assertions.
@@ -173,6 +175,15 @@ sequenceDiagram
    - Evaluates validity timestamps (`nbf`, `exp`, `validUntil`).
    - Queries revocation status list.
    - Emits structured `VerificationResult` (`VALID`, `INVALID`, `VALID_BUT_EXPIRED`, etc.).
+
+### C. Custom Data & Direct External Credential Verification (`POST /api/verifier/verify-raw`)
+To support arbitrary developer input and third-party credential testing beyond default mock schemas:
+1. **Custom Identity Claims Editor:**
+   - Inside the Inji Wallet keystore, users can toggle into "Customize Claims" mode to type arbitrary identity attributes (e.g. customized names, national IDs, or new domain-specific fields like `clearanceLevel`).
+   - Inji Certify signs these custom fields in the OpenID4VCI exchange, and Inji Verify cryptographically validates them during presentation.
+2. **Direct External Credential Verification (Upload / Paste):**
+   - External developers can drag-and-drop or paste raw W3C VC JSON files or IETF SD-JWT compact strings (`.jwt`) directly into Inji Verify via `POST /api/verifier/verify-raw`.
+   - Inji Verify parses the credential, extracts the issuer DID, verifies cryptographic signatures, audits temporal validity, and returns a complete audit breakdown.
 
 ---
 

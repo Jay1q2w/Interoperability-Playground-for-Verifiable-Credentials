@@ -18,6 +18,7 @@ import { TamperSelector } from '../components/TamperSelector';
 import { SequenceDiagram } from '../components/SequenceDiagram';
 import { ProtocolInspector } from '../components/ProtocolInspector';
 import { WalletCard } from '../components/WalletCard';
+import { ExternalVerifierTester } from '../components/ExternalVerifierTester';
 import { VerificationResultModal } from '../components/VerificationResultModal';
 import { runSingleFlow, subscribeWebSocket } from '../services/api';
 import { 
@@ -30,7 +31,8 @@ import {
   ChevronUp, 
   Play, 
   Sparkles,
-  ExternalLink
+  Upload,
+  Activity
 } from 'lucide-react';
 
 interface PlaygroundPageProps {
@@ -52,6 +54,7 @@ export const PlaygroundPage: React.FC<PlaygroundPageProps> = ({ modules }) => {
   const [selectedTamper, setSelectedTamper] = useState<TamperScenario>('NONE');
 
   const currentProfile = modules.profiles[selectedProfileId] || modules.profiles.MOSIP_NATIONAL_ID;
+  const [customClaims, setCustomClaims] = useState<Record<string, any>>({ ...currentProfile.claims });
   const [selectedClaims, setSelectedClaims] = useState<string[]>(Object.keys(currentProfile.claims));
 
   const [steps, setSteps] = useState<ProtocolExchangeStep[]>([]);
@@ -59,6 +62,7 @@ export const PlaygroundPage: React.FC<PlaygroundPageProps> = ({ modules }) => {
   const [verificationResult, setVerificationResult] = useState<VerificationResult | null>(null);
   const [showResultModal, setShowResultModal] = useState<boolean>(false);
   const [showConfig, setShowConfig] = useState<boolean>(false);
+  const [rightPanelTab, setRightPanelTab] = useState<'exchange' | 'external'>('exchange');
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [deepLink, setDeepLink] = useState<string>('');
   const [qrPayload, setQrPayload] = useState<string>('');
@@ -132,12 +136,15 @@ export const PlaygroundPage: React.FC<PlaygroundPageProps> = ({ modules }) => {
     setSelectedProfileId(preset.profileId);
     setSelectedTamper(preset.tamper);
     const prof = modules.profiles[preset.profileId] || modules.profiles.MOSIP_NATIONAL_ID;
+    setCustomClaims({ ...prof.claims });
     setSelectedClaims(Object.keys(prof.claims));
   };
 
-  // Sync selected claims when profile changes
+  // Sync claims when profile changes
   useEffect(() => {
-    setSelectedClaims(Object.keys(currentProfile.claims));
+    const prof = modules.profiles[selectedProfileId] || modules.profiles.MOSIP_NATIONAL_ID;
+    setCustomClaims({ ...prof.claims });
+    setSelectedClaims(Object.keys(prof.claims));
   }, [selectedProfileId]);
 
   // Connect WebSocket for live steps
@@ -171,6 +178,27 @@ export const PlaygroundPage: React.FC<PlaygroundPageProps> = ({ modules }) => {
     );
   };
 
+  const handleUpdateClaim = (key: string, value: string) => {
+    setCustomClaims((prev) => ({
+      ...prev,
+      [key]: value
+    }));
+  };
+
+  const handleAddClaim = (key: string, value: string) => {
+    setCustomClaims((prev) => ({
+      ...prev,
+      [key]: value
+    }));
+    setSelectedClaims((prev) => (prev.includes(key) ? prev : [...prev, key]));
+  };
+
+  const handleResetClaims = () => {
+    const prof = modules.profiles[selectedProfileId] || modules.profiles.MOSIP_NATIONAL_ID;
+    setCustomClaims({ ...prof.claims });
+    setSelectedClaims(Object.keys(prof.claims));
+  };
+
   const handleRunFlow = async () => {
     setIsRunning(true);
     setSteps([]);
@@ -185,7 +213,8 @@ export const PlaygroundPage: React.FC<PlaygroundPageProps> = ({ modules }) => {
         format: selectedFormat,
         profileId: selectedProfileId,
         tamperScenario: selectedTamper,
-        selectedClaims
+        selectedClaims,
+        customClaims
       });
 
       setSteps(runRecord.steps);
@@ -267,7 +296,7 @@ export const PlaygroundPage: React.FC<PlaygroundPageProps> = ({ modules }) => {
       )}
 
       {/* 2. One-Click Scenario Presets Bar */}
-      <div className="bg-zinc-950 border border-zinc-850 rounded-xl p-3">
+      <div className="bg-zinc-950 border border-zinc-855 rounded-xl p-3">
         <div className="flex items-center justify-between mb-2">
           <span className="font-mono text-[10px] uppercase text-zinc-400 tracking-wider flex items-center space-x-1.5 font-semibold">
             <Sparkles className="w-3 h-3 text-blue-300" />
@@ -401,9 +430,12 @@ export const PlaygroundPage: React.FC<PlaygroundPageProps> = ({ modules }) => {
           <WalletCard
             format={selectedFormat}
             profileId={selectedProfileId}
-            claims={currentProfile.claims}
+            claims={customClaims}
             selectedClaims={selectedClaims}
             onToggleClaim={handleToggleClaim}
+            onUpdateClaim={handleUpdateClaim}
+            onAddClaim={handleAddClaim}
+            onResetClaims={handleResetClaims}
             deepLink={deepLink}
             qrPayload={qrPayload}
             isIssued={isIssued}
@@ -412,88 +444,126 @@ export const PlaygroundPage: React.FC<PlaygroundPageProps> = ({ modules }) => {
           />
         </div>
 
-        {/* Right Column: Protocol Exchange Trace, Verdict Banner & Protocol Inspector */}
+        {/* Right Column: Protocol Exchange Trace, Verdict Banner & Protocol Inspector OR External Verifier */}
         <div className="lg:col-span-7 space-y-4">
-          {/* Inline Live Verification Verdict Banner */}
-          {verificationResult ? (
-            <div
-              className={`rounded-xl p-4 border transition-all duration-150 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm ${
-                verificationResult.isValid
-                  ? 'border-blue-900/70 bg-[#0a1628]'
-                  : 'border-amber-900/70 bg-amber-950/20'
-              }`}
-            >
-              <div className="flex items-start sm:items-center space-x-3">
-                <div
-                  className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 sm:mt-0 ${
-                    verificationResult.isValid ? 'bg-blue-600 text-white' : 'bg-amber-500/20 text-amber-300 border border-amber-600/50'
-                  }`}
-                >
-                  {verificationResult.isValid ? (
-                    <Check className="w-4 h-4 stroke-[3]" />
-                  ) : (
-                    <AlertTriangle className="w-4 h-4" />
-                  )}
-                </div>
-
-                <div>
-                  <div className="flex items-center space-x-2">
-                    <span className="font-semibold text-sm text-white tracking-tight">
-                      {verificationResult.status}
-                    </span>
-                    <span
-                      className={`text-[10px] font-mono px-2 py-0.5 rounded border uppercase font-semibold ${
-                        verificationResult.isValid
-                          ? 'bg-[#0e2448] text-blue-200 border-blue-800'
-                          : 'bg-amber-950/70 text-amber-300 border-amber-800'
-                      }`}
-                    >
-                      {verificationResult.isValid
-                        ? `${verificationResult.checks.filter((c) => c.passed).length}/${verificationResult.checks.length} Checks Passed`
-                        : 'Security Policy Rejected'}
-                    </span>
-                    <span className="font-mono text-[11px] text-zinc-400">
-                      {verificationResult.latencyMs}ms
-                    </span>
-                  </div>
-
-                  <p className="font-mono text-[11px] text-zinc-300 mt-1 leading-relaxed">
-                    Algorithm: <strong className="text-white">{verificationResult.cryptographicDetails.algorithm}</strong> • Key: <strong className="text-white truncate max-w-[140px] inline-block align-bottom">{verificationResult.cryptographicDetails.issuerKeyId}</strong>
-                  </p>
-                </div>
-              </div>
-
+          {/* Sub-navigation tabs for Right Panel */}
+          <div className="flex items-center justify-between pb-2 border-b border-zinc-800">
+            <div className="flex items-center space-x-2 font-mono text-xs">
               <button
-                onClick={() => setShowResultModal(true)}
-                className="px-3.5 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-850 text-zinc-200 hover:text-white border border-zinc-700 text-xs font-mono flex items-center space-x-1.5 transition-colors self-start sm:self-auto flex-shrink-0"
+                onClick={() => setRightPanelTab('exchange')}
+                className={`px-3 py-1.5 rounded-lg transition-colors flex items-center space-x-1.5 ${
+                  rightPanelTab === 'exchange'
+                    ? 'bg-[#0e2448] text-white border border-blue-900/80 font-medium'
+                    : 'text-zinc-400 hover:text-zinc-200 bg-zinc-900/50'
+                }`}
               >
-                <span>View Full Audit Certificate</span>
-                <ArrowUpRight className="w-3.5 h-3.5 text-blue-300" />
+                <Activity className="w-3.5 h-3.5 text-blue-300" />
+                <span>Live Protocol Sequence & Inspector</span>
+              </button>
+              <button
+                onClick={() => setRightPanelTab('external')}
+                className={`px-3 py-1.5 rounded-lg transition-colors flex items-center space-x-1.5 ${
+                  rightPanelTab === 'external'
+                    ? 'bg-[#0e2448] text-white border border-blue-900/80 font-medium'
+                    : 'text-zinc-400 hover:text-zinc-200 bg-zinc-900/50'
+                }`}
+              >
+                <Upload className="w-3.5 h-3.5 text-blue-300" />
+                <span>Verify External Credential (Upload / Paste)</span>
               </button>
             </div>
+          </div>
+
+          {rightPanelTab === 'external' ? (
+            /* External Verifier Tester Component */
+            <ExternalVerifierTester
+              onVerificationResult={(res) => setVerificationResult(res)}
+            />
           ) : (
-            <div className="rounded-xl p-3.5 border border-zinc-800 bg-zinc-950 flex items-center justify-between text-xs font-mono">
-              <div className="flex items-center space-x-2.5">
-                <ShieldCheck className="w-4 h-4 text-zinc-500" />
-                <span className="text-zinc-400">Ready to execute protocol flow. Click "Run Full Interoperability Flow".</span>
-              </div>
-            </div>
+            /* Standard Live Protocol Exchange View */
+            <>
+              {/* Inline Live Verification Verdict Banner */}
+              {verificationResult ? (
+                <div
+                  className={`rounded-xl p-4 border transition-all duration-150 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm ${
+                    verificationResult.isValid
+                      ? 'border-blue-900/70 bg-[#0a1628]'
+                      : 'border-amber-900/70 bg-amber-950/20'
+                  }`}
+                >
+                  <div className="flex items-start sm:items-center space-x-3">
+                    <div
+                      className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 sm:mt-0 ${
+                        verificationResult.isValid ? 'bg-blue-600 text-white' : 'bg-amber-500/20 text-amber-300 border border-amber-600/50'
+                      }`}
+                    >
+                      {verificationResult.isValid ? (
+                        <Check className="w-4 h-4 stroke-[3]" />
+                      ) : (
+                        <AlertTriangle className="w-4 h-4" />
+                      )}
+                    </div>
+
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <span className="font-semibold text-sm text-white tracking-tight">
+                          {verificationResult.status}
+                        </span>
+                        <span
+                          className={`text-[10px] font-mono px-2 py-0.5 rounded border uppercase font-semibold ${
+                            verificationResult.isValid
+                              ? 'bg-[#0e2448] text-blue-200 border-blue-800'
+                              : 'bg-amber-950/70 text-amber-300 border-amber-800'
+                          }`}
+                        >
+                          {verificationResult.isValid
+                            ? `${verificationResult.checks.filter((c) => c.passed).length}/${verificationResult.checks.length} Checks Passed`
+                            : 'Security Policy Rejected'}
+                        </span>
+                        <span className="font-mono text-[11px] text-zinc-400">
+                          {verificationResult.latencyMs}ms
+                        </span>
+                      </div>
+
+                      <p className="font-mono text-[11px] text-zinc-300 mt-1 leading-relaxed">
+                        Algorithm: <strong className="text-white">{verificationResult.cryptographicDetails.algorithm}</strong> • Key: <strong className="text-white truncate max-w-[140px] inline-block align-bottom">{verificationResult.cryptographicDetails.issuerKeyId}</strong>
+                      </p>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => setShowResultModal(true)}
+                    className="px-3.5 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-850 text-zinc-200 hover:text-white border border-zinc-700 text-xs font-mono flex items-center space-x-1.5 transition-colors self-start sm:self-auto flex-shrink-0"
+                  >
+                    <span>View Full Audit Certificate</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 text-blue-300" />
+                  </button>
+                </div>
+              ) : (
+                <div className="rounded-xl p-3.5 border border-zinc-800 bg-zinc-950 flex items-center justify-between text-xs font-mono">
+                  <div className="flex items-center space-x-2.5">
+                    <ShieldCheck className="w-4 h-4 text-zinc-500" />
+                    <span className="text-zinc-400">Ready to execute protocol flow. Click "Run Full Interoperability Flow".</span>
+                  </div>
+                </div>
+              )}
+
+              {/* Sequence Timeline */}
+              <SequenceDiagram
+                steps={steps}
+                selectedStepIndex={selectedStepIndex}
+                onSelectStep={setSelectedStepIndex}
+                isRunning={isRunning}
+              />
+
+              {/* Protocol Payload Inspector */}
+              <ProtocolInspector
+                steps={steps}
+                selectedStepIndex={selectedStepIndex}
+                onSelectStep={setSelectedStepIndex}
+              />
+            </>
           )}
-
-          {/* Sequence Timeline */}
-          <SequenceDiagram
-            steps={steps}
-            selectedStepIndex={selectedStepIndex}
-            onSelectStep={setSelectedStepIndex}
-            isRunning={isRunning}
-          />
-
-          {/* Protocol Payload Inspector */}
-          <ProtocolInspector
-            steps={steps}
-            selectedStepIndex={selectedStepIndex}
-            onSelectStep={setSelectedStepIndex}
-          />
         </div>
       </div>
 

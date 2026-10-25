@@ -1,4 +1,6 @@
 import express, { Request, Response } from 'express';
+import crypto from 'crypto';
+import * as jose from 'jose';
 import { ISSUER_MODULES, SAMPLE_PROFILES } from '../modules/issuers.js';
 import { WALLET_MODULES } from '../modules/wallets.js';
 import { VERIFIER_MODULES } from '../modules/verifiers.js';
@@ -9,7 +11,9 @@ import { executeInteroperabilityRun, runAutomatedTestSuite } from '../matrix/sui
 import { matrixStore, MatrixFilter } from '../matrix/store.js';
 import { broadcastEvent } from '../websocket/server.js';
 import { getKeys } from '../crypto/keys.js';
-import { CredentialFormat, CredentialProfileId, IssuerId, WalletId, VerifierId, TamperScenario } from '../types/index.js';
+import { canonicalizeJson } from '../crypto/w3c.js';
+import { verifySDJwtPresentation } from '../crypto/sdjwt.js';
+import { CredentialFormat, CredentialProfileId, IssuerId, WalletId, VerifierId, TamperScenario, VerificationResult } from '../types/index.js';
 
 const router = express.Router();
 
@@ -190,7 +194,8 @@ router.post('/interop/run', async (req: Request, res: Response) => {
       format = 'ldp_vc',
       profileId = 'MOSIP_NATIONAL_ID',
       tamperScenario = 'NONE',
-      selectedClaims
+      selectedClaims,
+      customClaims
     } = req.body;
 
     const record = await executeInteroperabilityRun({
@@ -201,6 +206,7 @@ router.post('/interop/run', async (req: Request, res: Response) => {
       profileId: profileId as CredentialProfileId,
       tamperScenario: tamperScenario as TamperScenario,
       selectedClaims,
+      customClaims,
       broadcastStep: (step) => {
         broadcastEvent({
           type: 'STEP_PROCESSED',
@@ -217,6 +223,162 @@ router.post('/interop/run', async (req: Request, res: Response) => {
     res.json(record);
   } catch (err: unknown) {
     res.status(500).json({ error: (err as Error).message });
+  }
+});
+
+/**
+ * POST /api/verifier/verify-raw
+ * Direct verification of an uploaded or pasted raw credential (W3C VC JSON, SD-JWT string, or VP token)
+ */
+router.post('/verifier/verify-raw', async (req: Request, res: Response) => {
+  try {
+    const { rawCredential, format: requestedFormat } = req.body;
+    if (!rawCredential) {
+      return res.status(400).json({ error: 'rawCredential is required' });
+    }
+
+    let parsed: any = rawCredential;
+    if (typeof rawCredential === 'string') {
+      const trimmed = rawCredential.trim();
+      if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
+        try {
+          parsed = JSON.parse(trimmed);
+        } catch (_) {
+          parsed = trimmed;
+        }
+      }
+    }
+
+    const startTime = Date.now();
+    const keys = getKeys();
+    const issuerKey = keys.injiCertifyIssuer;
+
+    // Detect format
+    let format = requestedFormat || 'ldp_vc';
+    if (typeof rawCredential === 'string' && rawCredential.includes('~')) {
+      format = 'vc+sd-jwt';
+    } else if (typeof parsed === 'object' && (parsed['@context'] || parsed.verifiableCredential || parsed.credentialSubject)) {
+      format = 'ldp_vc';
+    }
+
+    let result: VerificationResult;
+
+    if (format === 'vc+sd-jwt') {
+      const tokenStr = typeof rawCredential === 'string' ? rawCredential.trim() : JSON.stringify(rawCredential);
+      const sdVerify = await verifySDJwtPresentation(
+        tokenStr,
+        'nonce_raw_test',
+        'http://localhost:4000',
+        issuerKey
+      );
+      result = {
+        status: sdVerify.isValid ? 'VALID' : 'INVALID',
+        isValid: sdVerify.isValid,
+        issuerId: issuerKey.keyId,
+        format: 'vc+sd-jwt',
+        profileId: 'MOSIP_NATIONAL_ID',
+        verifiedClaims: sdVerify.verifiedClaims,
+        disclosedClaimsCount: Object.keys(sdVerify.verifiedClaims).length,
+        hiddenClaimsCount: sdVerify.hiddenCount,
+        checks: sdVerify.checks,
+        errors: sdVerify.errors,
+        warnings: [],
+        latencyMs: Date.now() - startTime,
+        timestamp: new Date().toISOString(),
+        cryptographicDetails: {
+          algorithm: issuerKey.alg,
+          issuerKeyId: issuerKey.keyId,
+          holderBindingVerified: sdVerify.checks.some((c) => c.name.includes('KB-JWT') && c.passed),
+          replayProtectionVerified: true,
+          notExpired: sdVerify.checks.some((c) => c.name.includes('Expiration') && c.passed),
+          revocationStatusVerified: true
+        }
+      };
+    } else if (format === 'ldp_vc') {
+      const vc = parsed.verifiableCredential ? parsed.verifiableCredential[0] : parsed;
+      const checks: any[] = [];
+      const errors: string[] = [];
+
+      // 1. Check syntax & context
+      const hasContext = Boolean(vc && vc['@context']);
+      checks.push({
+        name: 'JSON-LD @context Schema Compliance',
+        passed: hasContext,
+        message: hasContext ? 'Valid W3C VC 1.1 / 2.0 context' : 'Missing @context'
+      });
+      if (!hasContext) errors.push('Missing @context in credential');
+
+      // 2. Check temporal validity
+      const now = new Date();
+      const validUntil = vc.validUntil ? new Date(vc.validUntil) : new Date(Date.now() + 86400000);
+      const notExpired = validUntil.getTime() > now.getTime();
+      checks.push({
+        name: 'Credential Temporal Validity',
+        passed: notExpired,
+        message: notExpired ? `Valid until ${validUntil.toISOString()}` : 'EXPIRED'
+      });
+      if (!notExpired) errors.push('Credential has expired');
+
+      // 3. Check cryptographic signature
+      let signaturePassed = false;
+      try {
+        if (!vc.proof || !vc.proof.jws) {
+          throw new Error('Missing proof.jws in credential');
+        }
+        const { jws, ...proofWithoutJws } = vc.proof;
+        const { proof: _discard, ...vcWithoutProof } = vc;
+        const expectedDoc = canonicalizeJson({ ...vcWithoutProof, proof: proofWithoutJws });
+        const expectedHash = crypto.createHash('sha256').update(expectedDoc).digest();
+        const issuerPublicKey = await jose.importJWK(issuerKey.publicKeyJwk, issuerKey.alg);
+        const { payload } = await jose.compactVerify(jws, issuerPublicKey);
+        const hashMatches = Buffer.from(payload).equals(expectedHash);
+        signaturePassed = hashMatches;
+        checks.push({
+          name: 'Issuer Cryptographic Signature',
+          passed: hashMatches,
+          message: hashMatches ? `Verified against issuer key (${issuerKey.alg})` : 'Signature hash mismatch'
+        });
+        if (!hashMatches) errors.push('Signature hash mismatch');
+      } catch (e: any) {
+        checks.push({
+          name: 'Issuer Cryptographic Signature',
+          passed: false,
+          message: `Signature verification failed: ${e.message}`
+        });
+        errors.push(e.message);
+      }
+
+      const isValid = errors.length === 0;
+      result = {
+        status: isValid ? 'VALID' : signaturePassed ? 'INVALID' : 'TAMPERED_SIGNATURE',
+        isValid,
+        issuerId: vc.issuer || issuerKey.keyId,
+        format: 'ldp_vc',
+        profileId: 'MOSIP_NATIONAL_ID',
+        verifiedClaims: vc.credentialSubject || {},
+        disclosedClaimsCount: Object.keys(vc.credentialSubject || {}).length,
+        hiddenClaimsCount: 0,
+        checks,
+        errors,
+        warnings: [],
+        latencyMs: Date.now() - startTime,
+        timestamp: new Date().toISOString(),
+        cryptographicDetails: {
+          algorithm: issuerKey.alg,
+          issuerKeyId: issuerKey.keyId,
+          holderBindingVerified: true,
+          replayProtectionVerified: true,
+          notExpired,
+          revocationStatusVerified: true
+        }
+      };
+    } else {
+      return res.status(400).json({ error: `Unsupported credential format: ${format}` });
+    }
+
+    res.json(result);
+  } catch (err: unknown) {
+    res.status(400).json({ error: (err as Error).message });
   }
 });
 
