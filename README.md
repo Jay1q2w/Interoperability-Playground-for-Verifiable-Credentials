@@ -334,6 +334,7 @@ MOSIP_DECODE_2026/
 │   ├── Dockerfile                 # Multi-stage Nginx container
 │   └── package.json
 ├── docker-compose.yml             # Unified container orchestration
+├── API_DOCUMENTATION.md          # Comprehensive technical API reference & schemas
 ├── INTEROP_GAP_REPORT.md          # Full architectural gap analysis & GitHub issues
 ├── INTEROP_MATRIX_RESULTS.md      # Auto-generated 12-test matrix telemetry export
 └── README.md                      # Project documentation (Team !Paradox!)
