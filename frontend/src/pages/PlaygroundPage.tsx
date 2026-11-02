@@ -322,7 +322,7 @@ export const PlaygroundPage: React.FC<PlaygroundPageProps> = ({ modules }) => {
         </div>
 
         {/* Benchmark Presets Grid */}
-        <div className="bg-zinc-950 border border-zinc-800 rounded-xl p-4">
+        <div className="bg-zinc-950/70 backdrop-blur-md border border-zinc-800/80 rounded-xl p-4 shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <span className="font-mono text-[11px] uppercase tracking-wider text-zinc-400 font-semibold">
               Standard Interoperability Benchmarks
@@ -348,8 +348,8 @@ export const PlaygroundPage: React.FC<PlaygroundPageProps> = ({ modules }) => {
                   disabled={isRunning}
                   className={`p-3 rounded-lg border text-left transition-all duration-150 flex flex-col justify-between ${
                     isActive
-                      ? 'border-blue-700 bg-[#0a1628] text-white shadow-sm ring-1 ring-blue-600/30'
-                      : 'border-zinc-850 bg-zinc-900/40 hover:bg-zinc-900 text-zinc-400 hover:text-zinc-200'
+                      ? 'border-blue-600/80 bg-[#0a1628]/85 backdrop-blur-md text-white shadow-md shadow-blue-950/30 ring-1 ring-blue-500/30'
+                      : 'border-zinc-800/60 bg-zinc-900/30 backdrop-blur-sm hover:border-blue-800/50 hover:bg-[#0a1628]/40 text-zinc-400 hover:text-zinc-200'
                   }`}
                 >
                   <div>
@@ -377,13 +377,13 @@ export const PlaygroundPage: React.FC<PlaygroundPageProps> = ({ modules }) => {
         </div>
 
         {/* Active Pipeline Strip & Customization Trigger */}
-        <div className="bg-zinc-950 border border-zinc-800 rounded-xl p-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-sm">
+        <div className="bg-zinc-950/70 backdrop-blur-md border border-zinc-800/80 rounded-xl p-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-sm">
           <div className="flex items-center space-x-2 flex-wrap gap-y-2 text-xs font-mono">
             <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-semibold mr-1">
               Active Pipeline:
             </span>
 
-            <div className="flex items-center space-x-1.5 px-2.5 py-1 rounded-md bg-[#0a1628] border border-blue-900/60 text-white">
+            <div className="flex items-center space-x-1.5 px-2.5 py-1 rounded-md bg-[#0a1628]/80 backdrop-blur-sm border border-blue-900/60 text-white">
               <span className="text-[9px] text-blue-300 font-semibold uppercase">Issuer</span>
               <span className="text-zinc-600">•</span>
               <span className="font-semibold">{currentIssuerName}</span>
@@ -391,7 +391,7 @@ export const PlaygroundPage: React.FC<PlaygroundPageProps> = ({ modules }) => {
 
             <ArrowRight className="w-3.5 h-3.5 text-zinc-600 hidden sm:inline" />
 
-            <div className="flex items-center space-x-1.5 px-2.5 py-1 rounded-md bg-[#0a1628] border border-blue-900/60 text-white">
+            <div className="flex items-center space-x-1.5 px-2.5 py-1 rounded-md bg-[#0a1628]/80 backdrop-blur-sm border border-blue-900/60 text-white">
               <span className="text-[9px] text-blue-300 font-semibold uppercase">Holder</span>
               <span className="text-zinc-600">•</span>
               <span className="font-semibold">{currentWalletName}</span>
@@ -399,14 +399,14 @@ export const PlaygroundPage: React.FC<PlaygroundPageProps> = ({ modules }) => {
 
             <ArrowRight className="w-3.5 h-3.5 text-zinc-600 hidden sm:inline" />
 
-            <div className="flex items-center space-x-1.5 px-2.5 py-1 rounded-md bg-[#0a1628] border border-blue-900/60 text-white">
+            <div className="flex items-center space-x-1.5 px-2.5 py-1 rounded-md bg-[#0a1628]/80 backdrop-blur-sm border border-blue-900/60 text-white">
               <span className="text-[9px] text-blue-300 font-semibold uppercase">Verifier</span>
               <span className="text-zinc-600">•</span>
               <span className="font-semibold">{currentVerifierName}</span>
             </div>
 
             <div className="ml-auto flex items-center space-x-2">
-              <span className="px-2 py-0.5 rounded bg-[#0d1e38] text-blue-200 border border-blue-900/70 text-[10px] font-mono">
+              <span className="px-2 py-0.5 rounded bg-[#0d1e38]/80 backdrop-blur-sm text-blue-200 border border-blue-900/70 text-[10px] font-mono">
                 {selectedFormat}
               </span>
               {selectedTamper !== 'NONE' && (
@@ -572,10 +572,10 @@ export const PlaygroundPage: React.FC<PlaygroundPageProps> = ({ modules }) => {
             {/* Inline Cryptographic Verification Verdict Banner */}
             {verificationResult ? (
               <div
-                className={`rounded-xl p-4 border transition-all duration-150 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm ${
+                className={`rounded-xl p-4 border transition-all duration-150 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-md backdrop-blur-md ${
                   verificationResult.isValid
-                    ? 'border-blue-900/70 bg-[#0a1628]'
-                    : 'border-amber-900/70 bg-amber-950/20'
+                    ? 'border-blue-900/80 bg-[#0a1628]/85 shadow-blue-950/30'
+                    : 'border-amber-900/80 bg-amber-950/25 shadow-amber-950/20'
                 }`}
               >
                 <div className="flex items-start sm:items-center space-x-3">
@@ -622,14 +622,14 @@ export const PlaygroundPage: React.FC<PlaygroundPageProps> = ({ modules }) => {
 
                 <button
                   onClick={() => setShowResultModal(true)}
-                  className="px-3.5 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-850 text-zinc-200 hover:text-white border border-zinc-700 text-xs font-mono flex items-center space-x-1.5 transition-colors self-start sm:self-auto flex-shrink-0"
+                  className="px-3.5 py-1.5 rounded-lg bg-zinc-900/80 hover:bg-zinc-800 text-zinc-200 hover:text-white border border-zinc-700/80 text-xs font-mono flex items-center space-x-1.5 transition-colors self-start sm:self-auto flex-shrink-0 backdrop-blur-sm"
                 >
                   <span>View Full Audit Certificate</span>
                   <ArrowUpRight className="w-3.5 h-3.5 text-blue-300" />
                 </button>
               </div>
             ) : (
-              <div className="rounded-xl p-3.5 border border-zinc-800 bg-zinc-950 flex items-center justify-between text-xs font-mono">
+              <div className="rounded-xl p-3.5 border border-zinc-800/80 bg-zinc-950/70 backdrop-blur-md flex items-center justify-between text-xs font-mono shadow-sm">
                 <div className="flex items-center space-x-2.5">
                   <ShieldCheck className="w-4 h-4 text-zinc-500" />
                   <span className="text-zinc-400">

@@ -107,7 +107,7 @@ export const ProtocolInspector: React.FC<ProtocolInspectorProps> = ({
   const decoded = decodeTokenData(step?.responsePayload || step?.requestPayload);
 
   return (
-    <div className="border border-zinc-800 bg-zinc-950 rounded-xl p-5 flex flex-col h-full">
+    <div className="border border-zinc-800/80 bg-zinc-950/70 backdrop-blur-md rounded-xl p-5 flex flex-col h-full shadow-sm">
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 mb-4 border-b border-zinc-800/80">
         <div>
@@ -201,7 +201,7 @@ export const ProtocolInspector: React.FC<ProtocolInspectorProps> = ({
       )}
 
       {/* Code Canvas */}
-      <div className="bg-zinc-900/20 rounded-lg p-4 border border-zinc-850 flex-1 overflow-auto max-h-[440px] overscroll-contain font-mono text-xs leading-relaxed">
+      <div className="bg-zinc-950/60 backdrop-blur-sm rounded-lg p-4 border border-zinc-800/80 flex-1 overflow-auto max-h-[440px] overscroll-contain font-mono text-xs leading-relaxed">
         {!step ? (
           <div className="text-center py-10 text-zinc-600 font-mono">
             Awaiting payload exchange.

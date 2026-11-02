@@ -17,7 +17,7 @@ export const Header: React.FC<HeaderProps> = ({
   suiteProgress
 }) => {
   return (
-    <header className="border-b border-zinc-800/80 bg-zinc-950/90 backdrop-blur-md sticky top-0 z-40">
+    <header className="border-b border-zinc-800/70 bg-zinc-950/80 backdrop-blur-xl sticky top-0 z-40 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand */}
         <div className="flex items-center">
@@ -27,12 +27,12 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Navigation Tabs (Minimalist Segmented Control) */}
-        <nav className="flex items-center p-0.5 rounded-lg border border-zinc-800 bg-zinc-900/50">
+        <nav className="flex items-center p-0.5 rounded-lg border border-zinc-800/80 bg-zinc-900/40 backdrop-blur-sm">
           <button
             onClick={() => onTabChange('playground')}
             className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-150 ${
               activeTab === 'playground'
-                ? 'bg-[#0f1f38] text-white border border-blue-900/80 shadow-sm'
+                ? 'bg-[#0e2448] text-white border border-blue-800 shadow-sm ring-1 ring-blue-500/20'
                 : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
@@ -43,7 +43,7 @@ export const Header: React.FC<HeaderProps> = ({
             onClick={() => onTabChange('matrix')}
             className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-150 ${
               activeTab === 'matrix'
-                ? 'bg-[#0f1f38] text-white border border-blue-900/80 shadow-sm'
+                ? 'bg-[#0e2448] text-white border border-blue-800 shadow-sm ring-1 ring-blue-500/20'
                 : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
@@ -54,7 +54,7 @@ export const Header: React.FC<HeaderProps> = ({
             onClick={() => onTabChange('gaps')}
             className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-150 ${
               activeTab === 'gaps'
-                ? 'bg-[#0f1f38] text-white border border-blue-900/80 shadow-sm'
+                ? 'bg-[#0e2448] text-white border border-blue-800 shadow-sm ring-1 ring-blue-500/20'
                 : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >

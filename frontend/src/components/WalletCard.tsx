@@ -62,7 +62,7 @@ export const WalletCard: React.FC<WalletCardProps> = ({
     '784-1988-1234567-1';
 
   return (
-    <div className="border border-zinc-800 bg-zinc-950 rounded-xl p-5">
+    <div className="border border-zinc-800/80 bg-zinc-950/70 backdrop-blur-md rounded-xl p-5 shadow-sm">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Side: Physical / Biometric Security Document Card (5 cols) */}
         <div className="lg:col-span-5 flex flex-col space-y-4">
@@ -82,7 +82,7 @@ export const WalletCard: React.FC<WalletCardProps> = ({
           </div>
 
           {/* Biometric Card Visual */}
-          <div className="border border-blue-900/60 bg-[#0a1628] rounded-xl p-5 shadow-sm text-white relative overflow-hidden">
+          <div className="border border-blue-900/70 bg-[#0a1628]/85 backdrop-blur-md rounded-xl p-5 shadow-md shadow-blue-950/40 text-white relative overflow-hidden">
             {/* Subtle Header */}
             <div className="flex items-start justify-between pb-3 mb-3 border-b border-blue-900/50">
               <div>
@@ -228,7 +228,7 @@ export const WalletCard: React.FC<WalletCardProps> = ({
               {/* Claims inputs list */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-[220px] overflow-y-auto pr-1">
                 {Object.entries(claims).map(([key, value]) => (
-                  <div key={key} className="bg-zinc-900/60 p-2 rounded-lg border border-zinc-800">
+                  <div key={key} className="bg-zinc-900/40 backdrop-blur-sm p-2 rounded-lg border border-zinc-800/70">
                     <label className="text-[9px] text-blue-300/80 uppercase font-semibold block mb-1">
                       {key.replace(/([A-Z])/g, ' $1')}
                     </label>
@@ -236,7 +236,7 @@ export const WalletCard: React.FC<WalletCardProps> = ({
                       type="text"
                       value={Array.isArray(value) ? value.join(', ') : String(value)}
                       onChange={(e) => onUpdateClaim && onUpdateClaim(key, e.target.value)}
-                      className="w-full bg-zinc-950 border border-zinc-800 rounded px-2 py-1 text-xs text-white focus:outline-none focus:border-blue-600 transition-colors"
+                      className="w-full bg-zinc-950/70 border border-zinc-800/80 rounded px-2 py-1 text-xs text-white focus:outline-none focus:border-blue-500 transition-colors"
                     />
                   </div>
                 ))}
@@ -294,8 +294,8 @@ export const WalletCard: React.FC<WalletCardProps> = ({
                       onClick={() => onToggleClaim(key)}
                       className={`p-2.5 rounded-lg border transition-all duration-150 flex items-center justify-between cursor-pointer select-none ${
                         isDisclosed
-                          ? 'border-blue-800/80 bg-[#0a1628] text-white shadow-sm'
-                          : 'border-zinc-800/80 bg-zinc-900/30 text-zinc-500 opacity-60 hover:opacity-80'
+                          ? 'border-blue-700/80 bg-[#0a1628]/85 backdrop-blur-sm text-white shadow-sm ring-1 ring-blue-500/20'
+                          : 'border-zinc-800/60 bg-zinc-900/20 backdrop-blur-sm text-zinc-500 opacity-60 hover:opacity-80'
                       }`}
                     >
                       <div className="min-w-0 pr-2">

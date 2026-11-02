@@ -96,7 +96,7 @@ export const ExternalVerifierTester: React.FC<ExternalVerifierTesterProps> = ({
   };
 
   return (
-    <div className="border border-zinc-800 bg-zinc-950 rounded-xl p-5 space-y-4">
+    <div className="border border-zinc-800/80 bg-zinc-950/70 backdrop-blur-md rounded-xl p-5 space-y-4 shadow-sm">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-zinc-800/80">
         <div>
@@ -114,14 +114,14 @@ export const ExternalVerifierTester: React.FC<ExternalVerifierTesterProps> = ({
         </div>
 
         {/* Format Selector */}
-        <div className="flex items-center space-x-1 font-mono text-[11px] bg-zinc-900 p-1 rounded-lg border border-zinc-800">
+        <div className="flex items-center space-x-1 font-mono text-[11px] bg-zinc-900/60 backdrop-blur-sm p-1 rounded-lg border border-zinc-800/80">
           {(['auto', 'ldp_vc', 'vc+sd-jwt'] as const).map((fmt) => (
             <button
               key={fmt}
               onClick={() => setFormat(fmt)}
               className={`px-2.5 py-1 rounded-md transition-colors ${
                 format === fmt
-                  ? 'bg-[#0e2448] text-white border border-blue-900/70 font-semibold'
+                  ? 'bg-[#0e2448] text-white border border-blue-900/70 font-semibold shadow-sm'
                   : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
@@ -139,8 +139,8 @@ export const ExternalVerifierTester: React.FC<ExternalVerifierTesterProps> = ({
         onDrop={handleDrop}
         className={`border-2 border-dashed rounded-xl p-6 text-center transition-colors ${
           dragActive
-            ? 'border-blue-500 bg-[#0a1628]'
-            : 'border-zinc-800 bg-zinc-900/30 hover:border-zinc-700'
+            ? 'border-blue-500 bg-[#0a1628]/80 backdrop-blur-md'
+            : 'border-zinc-800/80 bg-zinc-900/25 backdrop-blur-sm hover:border-blue-700/60'
         }`}
       >
         <Upload className="w-6 h-6 text-zinc-400 mx-auto mb-2" />
@@ -186,7 +186,7 @@ export const ExternalVerifierTester: React.FC<ExternalVerifierTesterProps> = ({
           value={rawPayload}
           onChange={(e) => setRawPayload(e.target.value)}
           placeholder='Paste raw JSON credential (e.g. { "@context": [...], "type": ["VerifiableCredential"], ... }) or SD-JWT compact string (eyJ...~...)'
-          className="w-full h-36 bg-zinc-900/50 border border-zinc-800 rounded-lg p-3 font-mono text-xs text-zinc-200 focus:outline-none focus:border-blue-700 leading-relaxed custom-scrollbar"
+          className="w-full h-36 bg-zinc-950/70 backdrop-blur-sm border border-zinc-800/80 rounded-lg p-3 font-mono text-xs text-zinc-200 focus:outline-none focus:border-blue-500 leading-relaxed custom-scrollbar"
         />
       </div>
 

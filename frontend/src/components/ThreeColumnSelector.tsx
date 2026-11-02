@@ -30,7 +30,7 @@ export const ThreeColumnSelector: React.FC<ThreeColumnSelectorProps> = ({
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       {/* 1. Issuer Column */}
-      <div className="border border-zinc-800 bg-zinc-950 rounded-xl p-5 flex flex-col">
+      <div className="border border-zinc-800/80 bg-zinc-950/70 backdrop-blur-md rounded-xl p-5 flex flex-col shadow-sm">
         <div className="flex items-center justify-between pb-3 mb-3 border-b border-zinc-800/80">
           <div>
             <h3 className="font-mono text-[11px] uppercase tracking-wider text-zinc-400 font-medium">
@@ -52,8 +52,8 @@ export const ThreeColumnSelector: React.FC<ThreeColumnSelectorProps> = ({
                 onClick={() => !disabled && onSelectIssuer(item.id as IssuerId)}
                 className={`p-3 rounded-lg border transition-all duration-150 cursor-pointer ${
                   isSelected
-                    ? 'border-blue-700/80 bg-[#0a1628]/80 text-white shadow-sm'
-                    : 'border-zinc-850 bg-zinc-900/30 hover:border-zinc-750 text-zinc-300'
+                    ? 'border-blue-600/80 bg-[#0a1628]/85 backdrop-blur-md text-white shadow-sm ring-1 ring-blue-500/20'
+                    : 'border-zinc-800/60 bg-zinc-900/30 backdrop-blur-sm hover:border-blue-800/50 hover:bg-[#0a1628]/40 text-zinc-300'
                 } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 <div className="flex items-start justify-between">
@@ -96,7 +96,7 @@ export const ThreeColumnSelector: React.FC<ThreeColumnSelectorProps> = ({
       </div>
 
       {/* 2. Wallet Column */}
-      <div className="border border-zinc-800 bg-zinc-950 rounded-xl p-5 flex flex-col">
+      <div className="border border-zinc-800/80 bg-zinc-950/70 backdrop-blur-md rounded-xl p-5 flex flex-col shadow-sm">
         <div className="flex items-center justify-between pb-3 mb-3 border-b border-zinc-800/80">
           <div>
             <h3 className="font-mono text-[11px] uppercase tracking-wider text-zinc-400 font-medium">
@@ -118,8 +118,8 @@ export const ThreeColumnSelector: React.FC<ThreeColumnSelectorProps> = ({
                 onClick={() => !disabled && onSelectWallet(item.id as WalletId)}
                 className={`p-3 rounded-lg border transition-all duration-150 cursor-pointer ${
                   isSelected
-                    ? 'border-blue-700/80 bg-[#0a1628]/80 text-white shadow-sm'
-                    : 'border-zinc-850 bg-zinc-900/30 hover:border-zinc-750 text-zinc-300'
+                    ? 'border-blue-600/80 bg-[#0a1628]/85 backdrop-blur-md text-white shadow-sm ring-1 ring-blue-500/20'
+                    : 'border-zinc-800/60 bg-zinc-900/30 backdrop-blur-sm hover:border-blue-800/50 hover:bg-[#0a1628]/40 text-zinc-300'
                 } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 <div className="flex items-start justify-between">
@@ -157,7 +157,7 @@ export const ThreeColumnSelector: React.FC<ThreeColumnSelectorProps> = ({
       </div>
 
       {/* 3. Verifier Column */}
-      <div className="border border-zinc-800 bg-zinc-950 rounded-xl p-5 flex flex-col">
+      <div className="border border-zinc-800/80 bg-zinc-950/70 backdrop-blur-md rounded-xl p-5 flex flex-col shadow-sm">
         <div className="flex items-center justify-between pb-3 mb-3 border-b border-zinc-800/80">
           <div>
             <h3 className="font-mono text-[11px] uppercase tracking-wider text-zinc-400 font-medium">
@@ -179,8 +179,8 @@ export const ThreeColumnSelector: React.FC<ThreeColumnSelectorProps> = ({
                 onClick={() => !disabled && onSelectVerifier(item.id as VerifierId)}
                 className={`p-3 rounded-lg border transition-all duration-150 cursor-pointer ${
                   isSelected
-                    ? 'border-blue-700/80 bg-[#0a1628]/80 text-white shadow-sm'
-                    : 'border-zinc-850 bg-zinc-900/30 hover:border-zinc-750 text-zinc-300'
+                    ? 'border-blue-600/80 bg-[#0a1628]/85 backdrop-blur-md text-white shadow-sm ring-1 ring-blue-500/20'
+                    : 'border-zinc-800/60 bg-zinc-900/30 backdrop-blur-sm hover:border-blue-800/50 hover:bg-[#0a1628]/40 text-zinc-300'
                 } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 <div className="flex items-start justify-between">

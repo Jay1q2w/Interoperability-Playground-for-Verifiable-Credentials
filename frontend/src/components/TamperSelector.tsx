@@ -28,10 +28,10 @@ export const TamperSelector: React.FC<TamperSelectorProps> = ({
 
   return (
     <div
-      className={`border rounded-xl p-4 transition-all duration-150 ${
+      className={`border rounded-xl p-4 transition-all duration-150 backdrop-blur-md shadow-sm ${
         isTampered
-          ? 'border-amber-900/60 bg-amber-950/15'
-          : 'border-zinc-800 bg-zinc-950'
+          ? 'border-amber-900/70 bg-amber-950/25'
+          : 'border-zinc-800/80 bg-zinc-950/70'
       }`}
     >
       {/* Header Bar */}
@@ -108,9 +108,9 @@ export const TamperSelector: React.FC<TamperSelectorProps> = ({
                   className={`p-2.5 rounded-lg border transition-all duration-150 cursor-pointer ${
                     isSelected
                       ? isClean
-                        ? 'border-blue-700/80 bg-[#0a1628]/80 text-white shadow-sm'
-                        : 'border-amber-700/90 bg-amber-950/40 text-amber-100'
-                      : 'border-zinc-850 bg-zinc-900/30 hover:border-zinc-750 text-zinc-400 hover:text-zinc-200'
+                        ? 'border-blue-600/80 bg-[#0a1628]/85 backdrop-blur-md text-white shadow-sm ring-1 ring-blue-500/20'
+                        : 'border-amber-700/90 bg-amber-950/40 backdrop-blur-md text-amber-100'
+                      : 'border-zinc-800/60 bg-zinc-900/30 backdrop-blur-sm hover:border-zinc-700 text-zinc-400 hover:text-zinc-200'
                   } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   <div className="flex items-start justify-between">

@@ -71,7 +71,7 @@ export const SequenceDiagram: React.FC<SequenceDiagramProps> = ({
   }, [steps]);
 
   return (
-    <div className="border border-zinc-800 bg-zinc-950 rounded-xl p-5 flex flex-col">
+    <div className="border border-zinc-800/80 bg-zinc-950/70 backdrop-blur-md rounded-xl p-5 flex flex-col shadow-sm">
       <div className="flex items-center justify-between pb-3 mb-4 border-b border-zinc-800/80">
         <div>
           <h3 className="font-mono text-[11px] uppercase tracking-wider text-zinc-400 font-medium">
@@ -100,8 +100,8 @@ export const SequenceDiagram: React.FC<SequenceDiagramProps> = ({
               onClick={() => onSelectStep(idx)}
               className={`px-2.5 py-1 rounded text-[11px] font-mono flex items-center space-x-1.5 transition-all duration-150 border ${
                 isSelected
-                  ? 'border-blue-700/80 bg-[#0d1e38] text-white shadow-sm'
-                  : 'border-zinc-800 bg-zinc-900/60 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-850'
+                  ? 'border-blue-600/80 bg-[#0e2448]/90 text-white shadow-sm ring-1 ring-blue-500/20'
+                  : 'border-zinc-800/60 bg-zinc-900/40 backdrop-blur-sm text-zinc-400 hover:text-zinc-200 hover:bg-zinc-850/60'
               }`}
             >
               <span className="text-zinc-500">{step.stepIndex}.</span>
@@ -117,7 +117,7 @@ export const SequenceDiagram: React.FC<SequenceDiagramProps> = ({
       </div>
 
       {/* Mermaid Render Box */}
-      <div className="bg-zinc-900/40 rounded-lg p-4 border border-zinc-850 flex items-center justify-center min-h-[200px] overflow-x-auto">
+      <div className="bg-zinc-950/50 backdrop-blur-sm rounded-lg p-4 border border-zinc-800/70 flex items-center justify-center min-h-[200px] overflow-x-auto">
         {steps.length === 0 ? (
           <div className="text-center py-10 font-mono text-xs text-zinc-600">
             Awaiting flow initiation. Click "Run Interoperability Flow".

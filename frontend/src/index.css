@@ -29,3 +29,9 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #3f3f46;
 }
+
+/* Ambient backdrop blending mask */
+.bg-ambient-mask {
+  mask-image: radial-gradient(ellipse 75% 65% at 50% 35%, rgba(0, 0, 0, 1) 25%, rgba(0, 0, 0, 0) 80%);
+  -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 35%, rgba(0, 0, 0, 1) 25%, rgba(0, 0, 0, 0) 80%);
+}

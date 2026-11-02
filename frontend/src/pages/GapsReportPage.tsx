@@ -127,7 +127,7 @@ Update DIF PEX constraint engine to normalize claim roots or automatically evalu
       {/* Advisory Cards List */}
       <div className="space-y-4">
         {gaps.map((gap) => (
-          <div key={gap.id} className="border border-zinc-800 bg-zinc-950 rounded-xl p-6">
+          <div key={gap.id} className="border border-zinc-800/80 bg-zinc-950/70 backdrop-blur-md rounded-xl p-6 shadow-sm">
             {/* Top row */}
             <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 pb-3 mb-3 border-b border-zinc-850">
               <div className="flex items-center space-x-2.5">

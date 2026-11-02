@@ -41,7 +41,7 @@ export const FormatProfileSelector: React.FC<FormatProfileSelectorProps> = ({
   ];
 
   return (
-    <div className="border border-zinc-800 bg-zinc-950 rounded-xl p-5">
+    <div className="border border-zinc-800/80 bg-zinc-950/70 backdrop-blur-md rounded-xl p-5 shadow-sm">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Formats Selection */}
         <div>
@@ -61,8 +61,8 @@ export const FormatProfileSelector: React.FC<FormatProfileSelectorProps> = ({
                   onClick={() => !disabled && onSelectFormat(fmt.id)}
                   className={`p-3 rounded-lg border transition-all duration-150 cursor-pointer ${
                     isSelected
-                      ? 'border-blue-700/80 bg-[#0a1628]/80 text-white shadow-sm'
-                      : 'border-zinc-850 bg-zinc-900/30 hover:border-zinc-750 text-zinc-400 hover:text-zinc-200'
+                      ? 'border-blue-600/80 bg-[#0a1628]/85 backdrop-blur-md text-white shadow-sm ring-1 ring-blue-500/20'
+                      : 'border-zinc-800/60 bg-zinc-900/30 backdrop-blur-sm hover:border-blue-800/50 hover:bg-[#0a1628]/40 text-zinc-400 hover:text-zinc-200'
                   } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   <div className="flex items-start justify-between">
@@ -101,8 +101,8 @@ export const FormatProfileSelector: React.FC<FormatProfileSelectorProps> = ({
                   onClick={() => !disabled && onSelectProfile(id as CredentialProfileId)}
                   className={`p-3 rounded-lg border transition-all duration-150 cursor-pointer ${
                     isSelected
-                      ? 'border-blue-700/80 bg-[#0a1628]/80 text-white shadow-sm'
-                      : 'border-zinc-850 bg-zinc-900/30 hover:border-zinc-750 text-zinc-400 hover:text-zinc-200'
+                      ? 'border-blue-600/80 bg-[#0a1628]/85 backdrop-blur-md text-white shadow-sm ring-1 ring-blue-500/20'
+                      : 'border-zinc-800/60 bg-zinc-900/30 backdrop-blur-sm hover:border-blue-800/50 hover:bg-[#0a1628]/40 text-zinc-400 hover:text-zinc-200'
                   } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   <div className="flex items-start justify-between">

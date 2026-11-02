@@ -6,6 +6,7 @@ import { GapsReportPage } from './pages/GapsReportPage';
 import { fetchModules, runTestSuite } from './services/api';
 import { ModuleItem, ProfileItem, TamperItem, CredentialProfileId } from './types';
 import { AlertCircle, RefreshCw } from 'lucide-react';
+import worldMapBackdrop from './assets/world-id-map.png';
 
 export const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'playground' | 'matrix' | 'gaps'>('playground');
@@ -88,7 +89,26 @@ export const App: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col selection:bg-zinc-800 selection:text-white">
+    <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col selection:bg-zinc-800 selection:text-white relative overflow-x-hidden">
+      {/* Ambient Global Identity Interoperability Backdrop */}
+      <div 
+        aria-hidden="true" 
+        className="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none flex items-start justify-center"
+      >
+        {/* Subtle radial sovereign blue glow */}
+        <div className="absolute top-[-100px] w-[1100px] h-[600px] bg-[radial-gradient(ellipse_at_top,rgba(14,36,72,0.45),transparent_70%)]" />
+
+        {/* Ambient World Map Image seamlessly blended with mask and soft opacity */}
+        <img
+          src={worldMapBackdrop}
+          alt=""
+          className="absolute top-10 max-w-[1280px] w-[95vw] opacity-[0.16] bg-ambient-mask mix-blend-screen transform scale-105 pointer-events-none"
+        />
+
+        {/* Bottom subtle atmospheric depth vignette */}
+        <div className="absolute bottom-0 inset-x-0 h-64 bg-gradient-to-t from-zinc-950 via-zinc-950/70 to-transparent pointer-events-none" />
+      </div>
+
       {/* Top Header */}
       <Header
         activeTab={activeTab}
@@ -99,7 +119,7 @@ export const App: React.FC = () => {
       />
 
       {/* Main Content Area */}
-      <main className="flex-1">
+      <main className="flex-1 relative z-10">
         {activeTab === 'playground' && <PlaygroundPage modules={modules} />}
         {activeTab === 'matrix' && <MatrixDashboardPage />}
         {activeTab === 'gaps' && <GapsReportPage />}

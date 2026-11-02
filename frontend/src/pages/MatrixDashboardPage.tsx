@@ -96,7 +96,7 @@ export const MatrixDashboardPage: React.FC = () => {
       {/* Metrics Grid */}
       {stats && (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-          <div className="border border-blue-900/60 bg-[#0a1628]/70 rounded-xl p-4 shadow-sm">
+          <div className="border border-blue-900/70 bg-[#0a1628]/80 backdrop-blur-md rounded-xl p-4 shadow-sm">
             <span className="font-mono text-[10px] uppercase text-blue-300/80 tracking-wider block">
               Total Executed Runs
             </span>
@@ -106,7 +106,7 @@ export const MatrixDashboardPage: React.FC = () => {
             <span className="font-mono text-[10px] text-zinc-400 mt-1 block">All modules & formats</span>
           </div>
 
-          <div className="border border-zinc-800 bg-zinc-950 rounded-xl p-4">
+          <div className="border border-zinc-800/80 bg-zinc-950/70 backdrop-blur-md rounded-xl p-4 shadow-sm">
             <span className="font-mono text-[10px] uppercase text-zinc-500 tracking-wider block">
               Test Conformance Rate
             </span>
@@ -118,7 +118,7 @@ export const MatrixDashboardPage: React.FC = () => {
             </span>
           </div>
 
-          <div className="border border-zinc-800 bg-zinc-950 rounded-xl p-4">
+          <div className="border border-zinc-800/80 bg-zinc-950/70 backdrop-blur-md rounded-xl p-4 shadow-sm">
             <span className="font-mono text-[10px] uppercase text-zinc-500 tracking-wider block">
               Mean Verification Latency
             </span>
@@ -128,7 +128,7 @@ export const MatrixDashboardPage: React.FC = () => {
             <span className="font-mono text-[10px] text-zinc-500 mt-1 block">End-to-end evaluation</span>
           </div>
 
-          <div className="border border-zinc-800 bg-zinc-950 rounded-xl p-4">
+          <div className="border border-zinc-800/80 bg-zinc-950/70 backdrop-blur-md rounded-xl p-4 shadow-sm">
             <span className="font-mono text-[10px] uppercase text-zinc-500 tracking-wider block">
               Active Format Coverage
             </span>
@@ -142,7 +142,7 @@ export const MatrixDashboardPage: React.FC = () => {
 
       {/* Compatibility Cell Grid */}
       {stats && stats.matrixCells.length > 0 && (
-        <div className="border border-zinc-800 bg-zinc-950 rounded-xl p-5">
+        <div className="border border-zinc-800/80 bg-zinc-950/70 backdrop-blur-md rounded-xl p-5 shadow-sm">
           <div className="pb-3 mb-3 border-b border-zinc-800">
             <h3 className="font-mono text-[11px] uppercase tracking-wider text-zinc-400 font-medium">
               Module Compatibility Breakdown
@@ -194,7 +194,7 @@ export const MatrixDashboardPage: React.FC = () => {
       )}
 
       {/* Historical Runs Table */}
-      <div className="border border-zinc-800 bg-zinc-950 rounded-xl p-5">
+      <div className="border border-zinc-800/80 bg-zinc-950/70 backdrop-blur-md rounded-xl p-5 shadow-sm">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 mb-4 border-b border-zinc-800">
           <div>
             <h3 className="font-mono text-[11px] uppercase tracking-wider text-zinc-400 font-medium">
