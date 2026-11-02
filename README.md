@@ -1,3 +1,8 @@
+
+
+
+
+
 # Inji Interoperability Playground
 
 > **A Multi-Standard Verification & Diagnostic Testbed for Verifiable Credentials across OpenID4VCI (draft 13), OpenID4VP (draft 21–23), W3C VC 1.1/2.0, IETF SD-JWT VC, and ISO/IEC 18013-5 mdoc.**
@@ -16,6 +21,8 @@
 | **Deployment** | Docker Compose (`docker-compose up --build`), Node.js 18+ (Express BFF + React 18 / Vite / Tailwind) |
 
 ---
+## Video Demo
+https://github.com/user-attachments/assets/f5fbcf7c-688f-43c6-ab29-2928b77de8bf
 
 ## 1. Executive Summary
 
